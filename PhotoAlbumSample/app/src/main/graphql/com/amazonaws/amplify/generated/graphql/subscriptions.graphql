@@ -1,0 +1,76 @@
+# this is an auto generated file. This will be overwritten
+subscription OnCreateAlbum {
+  onCreateAlbum {
+    id
+    username
+    name
+    accesstype
+    photos {
+      nextToken
+    }
+  }
+}
+subscription OnUpdateAlbum {
+  onUpdateAlbum {
+    id
+    username
+    name
+    accesstype
+    photos {
+      nextToken
+    }
+  }
+}
+subscription OnDeleteAlbum {
+  onDeleteAlbum {
+    id
+    username
+    name
+    accesstype
+    photos {
+      nextToken
+    }
+  }
+}
+subscription OnCreatePhoto {
+  onCreatePhoto {
+    id
+    name
+    bucket
+    key
+    album {
+      id
+      username
+      name
+      accesstype
+    }
+  }
+}
+subscription OnUpdatePhoto {
+  onUpdatePhoto {
+    id
+    name
+    bucket
+    key
+    album {
+      id
+      username
+      name
+      accesstype
+    }
+  }
+}
+subscription OnDeletePhoto {
+  onDeletePhoto {
+    id
+    name
+    bucket
+    key
+    album {
+      id
+      username
+      name
+      accesstype
+    }
+  }
+}
