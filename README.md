@@ -5,9 +5,10 @@ CircleciScripts directory stores all the scripts which invokes end-to-end tests 
 
 PhotoAlbumSample directory stores all related to the sample app.
 
-#
-Resources
+# Resources
 
-    Developer Guide for AWS SDK for Android
+Developer Guide for AWS SDK for Android: https://aws-amplify.github.io/docs/android/start
 
 Please refer to README file in each folder for more specific instructions.
+
+To explore more Android sdk samples: https://github.com/awslabs/aws-sdk-android-samples
