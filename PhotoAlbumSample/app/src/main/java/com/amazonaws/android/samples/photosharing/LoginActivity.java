@@ -19,10 +19,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.client.Callback;
@@ -32,7 +32,7 @@ import com.amazonaws.mobile.client.UserStateDetails;
 
 /**
  * LoginActivity displays the drop-in UI of AWS Auth for Android SDK.
- * Allows user sign-up, sign-in and forget password.
+ * Allows user sign-up and sign-in.
  * Each time when user sign out, the app will return LoginActivity.
  */
 public class LoginActivity extends AppCompatActivity {
@@ -94,7 +94,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onError(Exception e) {
                 Log.e(TAG, "onError: ", e);
-                Toast.makeText(LoginActivity.this, "Request exception. Please try again!", Toast.LENGTH_SHORT).show();
+                new AlertDialog.Builder(LoginActivity.this)
+                            .setTitle("LoginError")
+                            .setMessage("Error logging in. ")
+                            .show();
             }
         });
     }
@@ -140,7 +143,10 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onError(Exception e) {
                         Log.e(TAG, "onError: ", e);
-                        Toast.makeText(LoginActivity.this, "Request exception. Please try again!", Toast.LENGTH_SHORT).show();
+                        new AlertDialog.Builder(LoginActivity.this)
+                                    .setTitle("LoginError")
+                                    .setMessage("Error logging in. ")
+                                    .show();
                     }
                 }
         );
