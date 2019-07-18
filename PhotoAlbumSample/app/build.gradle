@@ -29,20 +29,25 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    //AWS DEPENDENCIES
+
     def aws_version = "2.13.+"
+
+    // Storage dependency
     implementation "com.amazonaws:aws-android-sdk-s3:$aws_version"
+
+    // MobileClient dependency
     implementation("com.amazonaws:aws-android-sdk-mobile-client:$aws_version") { transitive = true }
-    implementation("com.amazonaws:aws-android-sdk-auth-userpools:$aws_version") {
-        transitive = true
-    }
+
+    // AppSync dependency
+    implementation 'com.amazonaws:aws-android-sdk-appsync:2.9.+'
+
+    // Auth dependency
+    implementation 'com.amazonaws:aws-android-sdk-auth-userpools:2.13.+'
     implementation 'com.amazonaws:aws-android-sdk-auth-ui:2.13.+'
 
-    // AppSync
-    implementation 'com.amazonaws:aws-android-sdk-appsync:+'
+
     implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0'
     implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
-
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.android.support:design:28.0.0'
 
