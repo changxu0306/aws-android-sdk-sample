@@ -3,7 +3,7 @@ This is the sample app repository for end-to-end testing between AWS Android SDK
 
 CircleciScripts directory stores all the scripts which invokes end-to-end tests automatically.
 
-PhotoAlbumSample directory stores all related to the sample app.
+PhotoAlbumSample directory stores all related to the sample app. Android instrumental tests are under PhotoSharingapp/app/java/androidTest folder.
 
 # Resources
 Developer Guide for AWS SDK for Android: https://aws-amplify.github.io/docs/android/start
