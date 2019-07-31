@@ -15,31 +15,25 @@
 
 package com.amazonaws.android.samples.photosharing;
 
-//  Created by Chang Xu on 6/25/19.
-//  Copyright © 2019 AWSMobile. All rights reserved.
+import android.graphics.Bitmap;
 
 public class Photo {
     private String id;
-    private int iId; // resource id
     private String name;
     private String bucket;
     private String key;
-    private boolean backedUp; // whether it's uploaded to s3 or not
+    private Bitmap file;
 
-    public Photo(String id, int iId, String name, String bucket, String key) {
+    public Photo(String id, String name, String bucket, String key, Bitmap file) {
         this.id = id;
-        this.iId = iId;
         this.name = name;
         this.bucket = bucket;
         this.key = key;
+        this.file = file;
     }
 
     public String getId() {
         return this.id;
-    }
-
-    public int getiId() {
-        return this.iId;
     }
 
     public String getName() {
@@ -54,12 +48,6 @@ public class Photo {
         return this.key;
     }
 
-    public boolean getBackedUp() {
-        return this.backedUp;
-    }
-
-    public void setBackedUp(boolean backedUp) {
-        this.backedUp = backedUp;
-    }
+    public Bitmap getPhoto(){ return this.file; }
 
 }

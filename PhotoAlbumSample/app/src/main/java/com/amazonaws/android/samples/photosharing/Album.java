@@ -64,12 +64,4 @@ public class Album {
         return this.photos;
     }
 
-    public void addPhoto(Photo photo) {
-        this.photos.add(photo);
-    }
-
-    public void deletePhoto(Photo photo) {
-        this.photos.remove(photo);
-    }
-
 }

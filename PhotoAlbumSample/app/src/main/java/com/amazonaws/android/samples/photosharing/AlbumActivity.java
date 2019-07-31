@@ -55,9 +55,7 @@ public class AlbumActivity extends AppCompatActivity {
 
         appSyncHelper = new AppSyncHelper(this);
 
-        // todo getUsername if auth testing works
         username = getUsername();
-//        username = AWSMobileClient.getInstance().getIdentityId();
 
         albumGridView = (GridView) findViewById(R.id.gw_lstAlbum);
 
@@ -91,13 +89,6 @@ public class AlbumActivity extends AppCompatActivity {
         albumList = appSyncHelper.listAlbums();
         mAdapter = new AlbumAdapter(this, albumList, EDIT_FLAG);
         albumGridView.setAdapter(mAdapter);
-    }
-
-    /**
-     * Get a list of albums from AppSync.
-     */
-    public void loadAlbumList() {
-        albumList = appSyncHelper.listAlbums();
     }
 
     /**
@@ -138,7 +129,6 @@ public class AlbumActivity extends AppCompatActivity {
                 dialog.show();
                 return true;
             case R.id.album_sign_out:
-                // todo sign out if auth testing works well
                 signOut();
                 return true;
             case R.id.album_edit:

@@ -95,8 +95,6 @@ public class AlbumAdapter extends BaseAdapter {
                 }
             });
 
-            //todo add Text listener
-
             final ViewHolder finalHolder = holder;
             holder.album_name.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -123,6 +121,7 @@ public class AlbumAdapter extends BaseAdapter {
                             .create();
                     dialog.show();
                     finalHolder.album_name.setText(albumName);
+
                 }
             });
 

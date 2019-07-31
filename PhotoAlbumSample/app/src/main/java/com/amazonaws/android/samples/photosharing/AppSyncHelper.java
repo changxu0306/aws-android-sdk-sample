@@ -23,7 +23,6 @@ import com.amazonaws.amplify.generated.graphql.CreatePhotoMutation;
 import com.amazonaws.amplify.generated.graphql.DeleteAlbumMutation;
 import com.amazonaws.amplify.generated.graphql.DeletePhotoMutation;
 import com.amazonaws.amplify.generated.graphql.ListAlbumsQuery;
-import com.amazonaws.amplify.generated.graphql.ListPhotosQuery;
 import com.amazonaws.amplify.generated.graphql.UpdateAlbumMutation;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.config.AWSConfiguration;
@@ -44,8 +43,6 @@ import type.CreateAlbumInput;
 import type.CreatePhotoInput;
 import type.DeleteAlbumInput;
 import type.DeletePhotoInput;
-import type.ModelIDFilterInput;
-import type.ModelPhotoFilterInput;
 import type.UpdateAlbumInput;
 
 public class AppSyncHelper {
@@ -72,7 +69,6 @@ public class AppSyncHelper {
                         }
                     }
                 })
-//        .credentialsProvider(AWSMobileClient.getInstance())
             .build();
 
     }
@@ -229,48 +225,5 @@ public class AppSyncHelper {
 
         mAWSAppSyncClient.mutate(DeletePhotoMutation.builder().input(deletePhotoInput).build())
                 .enqueue(deletePhotoCallback);
-    }
-
-    public ArrayList<Photo> listPhoto(String id) {
-
-        final ArrayList<Photo> lstPhoto = new ArrayList<Photo>();
-
-        final CountDownLatch countDownLatch = new CountDownLatch(1);
-
-        ModelIDFilterInput modelIDFilterInput = ModelIDFilterInput.builder().eq(id).build();
-
-        ModelPhotoFilterInput modelPhotoFilterInput = ModelPhotoFilterInput.builder().id(modelIDFilterInput).build();
-
-        mAWSAppSyncClient.query(ListPhotosQuery.builder().filter(modelPhotoFilterInput).build()).responseFetcher(AppSyncResponseFetchers.NETWORK_FIRST).enqueue(new GraphQLCall.Callback<ListPhotosQuery.Data>() {
-
-            @Override
-            public void onResponse(@Nonnull Response<ListPhotosQuery.Data> response) {
-                Log.d(TAG, "listPhotos succeeded." + response.data().toString());
-                try {
-                    List<ListPhotosQuery.Item> items = response.data().listPhotos().items();
-                    for (ListPhotosQuery.Item item : items) {
-                        lstPhoto.add(new Photo(item.id(), R.drawable.photo2, item.name(), item.bucket(), item.key()));
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                countDownLatch.countDown();
-            }
-
-            @Override
-            public void onFailure(@Nonnull ApolloException e) {
-                Log.d(TAG, "listPhotos failed." + e.getLocalizedMessage());
-                e.printStackTrace();
-                countDownLatch.countDown();
-            }
-        });
-
-        try {
-            countDownLatch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return lstPhoto;
     }
 }
