@@ -130,7 +130,7 @@ public class DownloadSelectionActivity extends ListActivity {
         @Override
         protected Void doInBackground(Void... inputs) {
             // Queries files in the bucket from S3.
-            s3ObjList = s3.listObjects(bucket).getObjectSummaries();
+            s3ObjList = s3.listObjects(bucket, "public/").getObjectSummaries();
             transferRecordMaps.clear();
             for (S3ObjectSummary summary : s3ObjList) {
                 HashMap<String, Object> map = new HashMap<String, Object>();
