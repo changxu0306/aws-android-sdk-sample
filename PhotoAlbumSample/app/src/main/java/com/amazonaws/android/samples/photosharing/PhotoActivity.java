@@ -71,20 +71,22 @@ public class PhotoActivity extends AppCompatActivity {
     private static final int UPLOAD_REQUEST_CODE = 0;
     private static final int DOWNLOAD_SELECTION_REQUEST_CODE = 1;
     private static final int REQUEST_WRITE_STORAGE = 112;
+    private static final String PUBLIC_ACCESSTYPE = "public";
+    private static final String PRIVATE_ACCESSTYPE = "private";
+    private static final String PROTECTED_ACCESSTYPE = "protected";
 
     private static String bucket;
     public static String username;
+    private static String userIdentityId;
     public static String accessType;
 
     // The SimpleAdapter adapts the data about transfers to rows in the UI
-    public static SimpleAdapter
-            simpleAdapter;
+    public static SimpleAdapter simpleAdapter;
 
     private Context mContext = PhotoActivity.this;
     private static GridView photoGridView;
     private PhotoAdapter mAdapter;
     private ArrayList<Photo> photoList;
-
 
     private static StorageHelper storageHelper;
     private static AppSyncHelper appSyncHelper;
@@ -104,7 +106,6 @@ public class PhotoActivity extends AppCompatActivity {
     };
     HashMap<Integer, String> resToFileName;
 
-
     private static final String TAG = PhotoActivity.class.getSimpleName();
 
     @Override
@@ -114,8 +115,8 @@ public class PhotoActivity extends AppCompatActivity {
 
         // Get bucket for this project from aws configuration
         bucket = new AWSConfiguration(this).optJsonObject("S3TransferUtility").optString("Bucket");
-        accessType = "public";
-        username = AWSMobileClient.getInstance().getUsername();
+        accessType = PRIVATE_ACCESSTYPE;
+        userIdentityId = getUserIdentityId();
 
         storageHelper = new StorageHelper(this);
         appSyncHelper = new AppSyncHelper(this);
@@ -268,6 +269,8 @@ public class PhotoActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//  this part is for future use
+
 //        if (requestCode == UPLOAD_REQUEST_CODE) {
 //            if (resultCode == Activity.RESULT_OK) {
 //                Uri uri = data.getData();
@@ -319,6 +322,8 @@ public class PhotoActivity extends AppCompatActivity {
                             .setPositiveButton("DONE", null)
                             .create();
                     alertDialog.show();
+
+                    createPhoto(filename, currentAlbumGraphQLid, key, bucket);
                 }
             }
 
@@ -351,7 +356,6 @@ public class PhotoActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
 
                     photoList.add(new Photo("123", file.getName(), bucket, key, BitmapFactory.decodeFile(file.getPath())));
-                    createPhoto(file.getName(), currentAlbumGraphQLid, key, bucket);
                     refresh();
                 }
             }
@@ -478,7 +482,7 @@ public class PhotoActivity extends AppCompatActivity {
      * @return
      */
     public String getKeyInBucket(String photoName, String accessType) {
-        return accessType + "/" + username + "/" + photoName;
+        return accessType + "/" + userIdentityId + "/" + photoName;
     }
 
     /**
@@ -521,5 +525,14 @@ public class PhotoActivity extends AppCompatActivity {
             storageHelper.fillMap(map, observer, false);
         }
         simpleAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Get current userIdentityId.
+     */
+    public String getUserIdentityId() {
+        String userIdentityId = AWSMobileClient.getInstance().getIdentityId();
+        Log.e(TAG, "Successfully get userIdentityId: " + userIdentityId);
+        return userIdentityId;
     }
 }

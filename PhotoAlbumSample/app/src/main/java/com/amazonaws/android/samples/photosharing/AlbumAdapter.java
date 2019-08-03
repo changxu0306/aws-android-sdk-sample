@@ -30,13 +30,21 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+/**
+ * AlbumAdapter is a customized adapter to adapt albums to gridView.
+ */
 public class AlbumAdapter extends BaseAdapter {
     private Activity activity;
     private LayoutInflater inflater;
     private ArrayList<Album> albumList;
     private boolean editable;
-    private static final String TAG = AlbumAdapter.class.getSimpleName();
     private static String albumName;
+
+    private static final String INDEX = "index";
+    private static final String REQUEST_CODE = "ReqCode";
+    private static final String NEW_ALBUM_NAME = "newAlbumName";
+    private static final int DELETE_REQUEST_CODE = 1;
+    private static final int UPDATE_REQUEST_CODE = 2;
 
     public AlbumAdapter(Activity activity, ArrayList<Album> albums, boolean editable) {
         this.activity = activity;
@@ -67,12 +75,12 @@ public class AlbumAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.grid_album_item, null);
             holder = new ViewHolder();
             holder.album_image =  view.findViewById(R.id.album_image);
-            holder.album_image.setImageResource(albumList.get(position).getiId());
+            holder.album_image.setImageResource(albumList.get(position).getResId());
 
             holder.delete_album = view.findViewById(R.id.delete_album);
 
             holder.album_name = view.findViewById(R.id.album_name);
-            albumName = albumList.get(position).getName();
+            albumName = albumList.get(position).getAlbumName();
             holder.album_name.setText(albumName);
             view.setTag(holder);
 
@@ -88,9 +96,9 @@ public class AlbumAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(activity, AlbumActivity.class);
-                    intent.putExtra("index", position);
+                    intent.putExtra(INDEX, position);
                     // Request code 1 for delete
-                    intent.putExtra("ReqCode", 1);
+                    intent.putExtra(REQUEST_CODE, DELETE_REQUEST_CODE);
                     activity.startActivity(intent);
                 }
             });
@@ -111,10 +119,9 @@ public class AlbumAdapter extends BaseAdapter {
 
                                     // Pass the data to AlbumActivity
                                     Intent intent = new Intent(activity, AlbumActivity.class);
-                                    intent.putExtra("index", position);
-                                    intent.putExtra("newAlbumName", albumName);
-                                    // Request code 2 for update
-                                    intent.putExtra("ReqCode", 2);
+                                    intent.putExtra(INDEX, position);
+                                    intent.putExtra(NEW_ALBUM_NAME, albumName);
+                                    intent.putExtra(REQUEST_CODE, UPDATE_REQUEST_CODE);
                                 }
                             })
                             .setNegativeButton("Cancel", null)
@@ -141,12 +148,15 @@ public class AlbumAdapter extends BaseAdapter {
         return view;
     }
 
+    /**
+     * ViewHolder defines each cell in the gridView.
+     */
     protected class ViewHolder {
-
+        // ImageButton to show the image of an album
         protected ImageButton album_image;
-
+        // Button to delete an album
         protected Button delete_album;
-
+        // TextView to show album name
         protected TextView album_name;
     }
 }

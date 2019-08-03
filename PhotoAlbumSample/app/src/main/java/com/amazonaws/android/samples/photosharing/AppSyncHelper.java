@@ -21,7 +21,6 @@ import android.util.Log;
 import com.amazonaws.amplify.generated.graphql.CreateAlbumMutation;
 import com.amazonaws.amplify.generated.graphql.CreatePhotoMutation;
 import com.amazonaws.amplify.generated.graphql.DeleteAlbumMutation;
-import com.amazonaws.amplify.generated.graphql.DeletePhotoMutation;
 import com.amazonaws.amplify.generated.graphql.ListAlbumsQuery;
 import com.amazonaws.amplify.generated.graphql.UpdateAlbumMutation;
 import com.amazonaws.mobile.client.AWSMobileClient;
@@ -42,16 +41,21 @@ import javax.annotation.Nonnull;
 import type.CreateAlbumInput;
 import type.CreatePhotoInput;
 import type.DeleteAlbumInput;
-import type.DeletePhotoInput;
 import type.UpdateAlbumInput;
 
+/**
+ * AppSyncHelper maintains utilities for using AppSync.
+ */
 public class AppSyncHelper {
 
     private static final String TAG = AppSyncHelper.class.getSimpleName();
 
     private AWSAppSyncClient mAWSAppSyncClient;
 
-    // Constructor
+    /**
+     * Initialize an AWSAppSyncClient when create an AppSyncHelper object.
+     * @param context
+     */
     public AppSyncHelper(Context context) {
 
         // Initialize AWSAppSyncClient
@@ -64,8 +68,8 @@ public class AppSyncHelper {
                         try {
                             return AWSMobileClient.getInstance().getTokens().getIdToken().getTokenString();
                         } catch (Exception e) {
-                            Log.e("APPSYNC_ERROR!", e.getLocalizedMessage());
-                            return e.getLocalizedMessage();
+                            Log.e(TAG, e.getLocalizedMessage());
+                            return null;
                         }
                     }
                 })
@@ -76,11 +80,13 @@ public class AppSyncHelper {
     private GraphQLCall.Callback<CreateAlbumMutation.Data> createAlbumCallback = new GraphQLCall.Callback<CreateAlbumMutation.Data>() {
         @Override
         public void onResponse(@Nonnull Response<CreateAlbumMutation.Data> response) {
-            Log.i(TAG, "An album is created successfully in GraphQL.");
+            String albumName = response.data().createAlbum().name();
+            Log.i(TAG, "An album with name" + albumName + "is created successfully.");
         }
 
         @Override
         public void onFailure(@Nonnull ApolloException e) {
+            Log.i(TAG, "Failed to create an album.");
             e.printStackTrace();
         }
     };
@@ -88,11 +94,13 @@ public class AppSyncHelper {
     private GraphQLCall.Callback<DeleteAlbumMutation.Data> deleteAlbumCallback = new GraphQLCall.Callback<DeleteAlbumMutation.Data>() {
         @Override
         public void onResponse(@Nonnull Response<DeleteAlbumMutation.Data> response) {
-            Log.i(TAG, "An album is deleted successfully in GraphQL.");
+            String albumName = response.data().deleteAlbum().name();
+            Log.i(TAG, "An album with name" + albumName + "is deleted successfully.");
         }
 
         @Override
         public void onFailure(@Nonnull ApolloException e) {
+            Log.i(TAG, "Failed to delete an album.");
             e.printStackTrace();
         }
     };
@@ -100,19 +108,22 @@ public class AppSyncHelper {
     private GraphQLCall.Callback<UpdateAlbumMutation.Data> updateAlbumCallback = new GraphQLCall.Callback<UpdateAlbumMutation.Data>() {
         @Override
         public void onResponse(@Nonnull Response<UpdateAlbumMutation.Data> response) {
-            Log.i(TAG, "An album is updated successfully in GraphQL.");
+            String albumName = response.data().updateAlbum().name();
+            Log.i(TAG, "An album with name" + albumName + "is updated successfully.");
         }
 
         @Override
         public void onFailure(@Nonnull ApolloException e) {
+            Log.i(TAG, "Failed to update an album.");
+            e.printStackTrace();
         }
     };
 
-    public void createAlbum(final String name, final String username, final String accessType) {
+    public void createAlbum(final String albumName, final String userName, final String accessType) {
 
         CreateAlbumInput createAlbumInput = CreateAlbumInput.builder()
-                .name(name)
-                .username(username)
+                .name(albumName)
+                .username(userName)
                 .accesstype(accessType)
                 .build();
 
@@ -120,110 +131,95 @@ public class AppSyncHelper {
                 .enqueue(createAlbumCallback);
     }
 
-    public void deleteAlbum(final String id) {
+    public void deleteAlbum(final String albumId) {
 
         DeleteAlbumInput deleteAlbumInput = DeleteAlbumInput.builder()
-                .id(id)
+                .id(albumId)
                 .build();
 
         mAWSAppSyncClient.mutate(DeleteAlbumMutation.builder().input(deleteAlbumInput).build())
                 .enqueue(deleteAlbumCallback);
     }
 
-    public void updateAlbum(final String name, final String id) {
+    public void updateAlbum(final String albumName, final String albumId) {
         UpdateAlbumInput updateAlbumInput = UpdateAlbumInput.builder()
-                .name(name)
-                .id(id)
+                .name(albumName)
+                .id(albumId)
                 .build();
 
         mAWSAppSyncClient.mutate(UpdateAlbumMutation.builder().input(updateAlbumInput).build())
                 .enqueue(updateAlbumCallback);
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<Album> listAlbums() {
-        final ArrayList<Album> lstAlbum = new ArrayList<Album>();
+        final ArrayList<Album> albumList = new ArrayList<Album>();
 
-        final CountDownLatch countDownLatch = new CountDownLatch(1);
-        mAWSAppSyncClient.query(ListAlbumsQuery.builder().limit(30).build()).responseFetcher(AppSyncResponseFetchers.NETWORK_ONLY).enqueue(new GraphQLCall.Callback<ListAlbumsQuery.Data>() {
+        final CountDownLatch listAlbumsLatch = new CountDownLatch(1);
+        // limit is set to ensure the all the albums can be queried successfully if the number of albums is less than or equal to 30.
+        // The number of limit can be adjusted by customers.
+
+        // Using NETWORK_ONLY state is set to AppSyncResponseFetcher in case deleted albums still stay in cache.
+        mAWSAppSyncClient.query(ListAlbumsQuery.builder().limit(30).build()).responseFetcher(AppSyncResponseFetchers.NETWORK_ONLY)
+                .enqueue(new GraphQLCall.Callback<ListAlbumsQuery.Data>() {
             @Override
             public void onResponse(@Nonnull Response<ListAlbumsQuery.Data> response) {
                 Log.d(TAG, "listAlbums succeeded." + response.data().toString());
                 try {
                     List<ListAlbumsQuery.Item> items = response.data().listAlbums().items();
                     for (ListAlbumsQuery.Item item : items) {
-                        lstAlbum.add(new Album(item.id(), R.drawable.album1, item.name(), item.accesstype(), new ArrayList<Photo>()));
+                        albumList.add(new Album(item.id(), R.drawable.album1, item.name(), item.accesstype(), new ArrayList<Photo>()));
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                countDownLatch.countDown();
+                listAlbumsLatch.countDown();
             }
 
             @Override
             public void onFailure(@Nonnull ApolloException e) {
                 Log.d(TAG, "listAlbums failed." + e.getLocalizedMessage());
                 e.printStackTrace();
-                countDownLatch.countDown();
+                listAlbumsLatch.countDown();
             }
         });
 
         try {
-            countDownLatch.await();
+            listAlbumsLatch.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return lstAlbum;
+        return albumList;
     }
 
     private GraphQLCall.Callback<CreatePhotoMutation.Data> createPhotoCallback = new GraphQLCall.Callback<CreatePhotoMutation.Data>() {
         @Override
         public void onResponse(@Nonnull Response<CreatePhotoMutation.Data> response) {
-            Log.i(TAG, "A photo is added successfully.");
+            String photoName = response.data().createPhoto().name();
+            Log.i(TAG, "A photo with name" + photoName + "is created successfully.");
         }
 
         @Override
         public void onFailure(@Nonnull ApolloException e) {
+            Log.i(TAG, "Failed to create a photo.");
             e.printStackTrace();
         }
     };
 
-    private GraphQLCall.Callback<DeletePhotoMutation.Data> deletePhotoCallback = new GraphQLCall.Callback<DeletePhotoMutation.Data>() {
-        @Override
-        public void onResponse(@Nonnull Response<DeletePhotoMutation.Data> response) {
-            Log.i(TAG, "A photo is deleted successfully.");
-            try {
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onFailure(@Nonnull ApolloException e) {
-            e.printStackTrace();
-        }
-    };
-
-    public void createPhoto(final String name, final String albumID, final String key, final String bucket) {
+    public void createPhoto(final String albumName, final String albumID, final String photoS3key, final String photoS3Bucket) {
 
         CreatePhotoInput createPhotoInput = CreatePhotoInput.builder()
                 .photoAlbumId(albumID)
-                .name(name)
-                .key(key)
-                .bucket(bucket)
+                .name(albumName)
+                .key(photoS3key)
+                .bucket(photoS3Bucket)
                 .build();
 
         mAWSAppSyncClient.mutate(CreatePhotoMutation.builder().input(createPhotoInput).build())
                 .enqueue(createPhotoCallback);
     }
 
-     public void deletePhoto(final String id) {
-
-        DeletePhotoInput deletePhotoInput = DeletePhotoInput.builder()
-                .id(id)
-                .build();
-
-        mAWSAppSyncClient.mutate(DeletePhotoMutation.builder().input(deletePhotoInput).build())
-                .enqueue(deletePhotoCallback);
-    }
 }

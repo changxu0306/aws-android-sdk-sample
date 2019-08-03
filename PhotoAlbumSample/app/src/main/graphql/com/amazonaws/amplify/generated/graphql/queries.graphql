@@ -6,6 +6,12 @@ query GetAlbum($id: ID!) {
     name
     accesstype
     photos {
+      items {
+        id
+        name
+        bucket
+        key
+      }
       nextToken
     }
   }
@@ -21,6 +27,9 @@ query ListAlbums(
       username
       name
       accesstype
+      photos {
+        nextToken
+      }
     }
     nextToken
   }
@@ -36,6 +45,9 @@ query GetPhoto($id: ID!) {
       username
       name
       accesstype
+      photos {
+        nextToken
+      }
     }
   }
 }
@@ -50,6 +62,12 @@ query ListPhotos(
       name
       bucket
       key
+      album {
+        id
+        username
+        name
+        accesstype
+      }
     }
     nextToken
   }

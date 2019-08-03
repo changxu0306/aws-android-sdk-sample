@@ -48,6 +48,17 @@ public class AlbumActivity extends AppCompatActivity {
 
     private static String username;
 
+    private static final String INDEX = "index";
+    private static final String REQUEST_CODE = "ReqCode";
+    private static final String NEW_ALBUM_NAME = "newAlbumName";
+    private static final int DEFAULT_VALUE_OF_REQUEST_CODE = -1;
+    private static final int DELETE_REQUEST_CODE = 1;
+    private static final int UPDATE_REQUEST_CODE = 2;
+
+    private static final String PUBLIC_ACCESSTYPE = "public";
+    private static final String PRIVATE_ACCESSTYPE = "private";
+    private static final String PROTECTED_ACCESSTYPE = "protected";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,33 +70,31 @@ public class AlbumActivity extends AppCompatActivity {
 
         albumGridView = (GridView) findViewById(R.id.gw_lstAlbum);
 
-        refresh();
+        updateAlbumGridViewWithAlbums();
 
-        if (getIntent().getIntExtra("index",-1) != -1) {
+        if (getIntent().getIntExtra(INDEX, DEFAULT_VALUE_OF_REQUEST_CODE) != DEFAULT_VALUE_OF_REQUEST_CODE) {
 
-            indexOfAlbumClicked = getIntent().getIntExtra("index",0);
+            indexOfAlbumClicked = getIntent().getIntExtra(INDEX,0);
 
             // Get delete request
-            if (getIntent().getIntExtra("ReqCode", -1) == 1) {
+            if (getIntent().getIntExtra(REQUEST_CODE, DEFAULT_VALUE_OF_REQUEST_CODE) == DELETE_REQUEST_CODE) {
                 deleteAlbum();
-                refresh();
             }
 
             // Get update request
-            else if (getIntent().getIntExtra("ReqCode", -1) == 2) {
-                String newAlbumName = getIntent().getStringExtra("newAlbumName");
+            else if (getIntent().getIntExtra(REQUEST_CODE, DEFAULT_VALUE_OF_REQUEST_CODE) == UPDATE_REQUEST_CODE) {
+                String newAlbumName = getIntent().getStringExtra(NEW_ALBUM_NAME);
                 updateAlbum(newAlbumName);
-                refresh();
             }
         }
-        refresh();
-
+        updateAlbumGridViewWithAlbums();
+        updateAlbumGridViewWithAlbums();
     }
 
     /**
      * Refresh the current view with the latest data.
      */
-    public void refresh() {
+    private void updateAlbumGridViewWithAlbums() {
         albumList = appSyncHelper.listAlbums();
         mAdapter = new AlbumAdapter(this, albumList, EDIT_FLAG);
         albumGridView.setAdapter(mAdapter);
@@ -121,7 +130,7 @@ public class AlbumActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 String nameOfAlbum = String.valueOf(albumEditText.getText());
                                 createAlbum(nameOfAlbum);
-                                refresh();
+                                updateAlbumGridViewWithAlbums();
                             }
                         })
                         .setNegativeButton("Cancel", null)
@@ -137,7 +146,7 @@ public class AlbumActivity extends AppCompatActivity {
                 } else {
                     EDIT_FLAG = true;
                 }
-                refresh();
+                updateAlbumGridViewWithAlbums();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -145,11 +154,10 @@ public class AlbumActivity extends AppCompatActivity {
 
     /**
      * Create an album.
-     * @param name
+     * @param albumName
      */
-    public void createAlbum(String name) {
-        // Now we only have public accessType. Will add private and protected in the next stage.
-        appSyncHelper.createAlbum(name, username, "public");
+    private void createAlbum(String albumName) {
+        appSyncHelper.createAlbum(albumName, username, PRIVATE_ACCESSTYPE);
     }
 
     /**

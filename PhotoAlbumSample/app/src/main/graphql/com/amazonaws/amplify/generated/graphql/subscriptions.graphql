@@ -6,6 +6,12 @@ subscription OnCreateAlbum {
     name
     accesstype
     photos {
+      items {
+        id
+        name
+        bucket
+        key
+      }
       nextToken
     }
   }
@@ -17,6 +23,12 @@ subscription OnUpdateAlbum {
     name
     accesstype
     photos {
+      items {
+        id
+        name
+        bucket
+        key
+      }
       nextToken
     }
   }
@@ -28,6 +40,12 @@ subscription OnDeleteAlbum {
     name
     accesstype
     photos {
+      items {
+        id
+        name
+        bucket
+        key
+      }
       nextToken
     }
   }
@@ -43,6 +61,9 @@ subscription OnCreatePhoto {
       username
       name
       accesstype
+      photos {
+        nextToken
+      }
     }
   }
 }
@@ -57,6 +78,9 @@ subscription OnUpdatePhoto {
       username
       name
       accesstype
+      photos {
+        nextToken
+      }
     }
   }
 }
@@ -71,6 +95,9 @@ subscription OnDeletePhoto {
       username
       name
       accesstype
+      photos {
+        nextToken
+      }
     }
   }
 }

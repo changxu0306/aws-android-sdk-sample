@@ -6,6 +6,12 @@ mutation CreateAlbum($input: CreateAlbumInput!) {
     name
     accesstype
     photos {
+      items {
+        id
+        name
+        bucket
+        key
+      }
       nextToken
     }
   }
@@ -17,6 +23,12 @@ mutation UpdateAlbum($input: UpdateAlbumInput!) {
     name
     accesstype
     photos {
+      items {
+        id
+        name
+        bucket
+        key
+      }
       nextToken
     }
   }
@@ -28,6 +40,12 @@ mutation DeleteAlbum($input: DeleteAlbumInput!) {
     name
     accesstype
     photos {
+      items {
+        id
+        name
+        bucket
+        key
+      }
       nextToken
     }
   }
@@ -43,6 +61,9 @@ mutation CreatePhoto($input: CreatePhotoInput!) {
       username
       name
       accesstype
+      photos {
+        nextToken
+      }
     }
   }
 }
@@ -57,6 +78,9 @@ mutation UpdatePhoto($input: UpdatePhotoInput!) {
       username
       name
       accesstype
+      photos {
+        nextToken
+      }
     }
   }
 }
@@ -71,6 +95,9 @@ mutation DeletePhoto($input: DeletePhotoInput!) {
       username
       name
       accesstype
+      photos {
+        nextToken
+      }
     }
   }
 }

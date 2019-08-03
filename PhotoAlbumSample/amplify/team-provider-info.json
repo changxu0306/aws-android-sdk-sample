@@ -1,0 +1,19 @@
+{
+    "integtest": {
+        "awscloudformation": {
+            "AuthRoleName": "photosharing-master-integtest-20190801110314-authRole",
+            "UnauthRoleArn": "arn:aws:iam::712985920941:role/photosharing-master-integtest-20190801110314-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::712985920941:role/photosharing-master-integtest-20190801110314-authRole",
+            "Region": "us-west-2",
+            "DeploymentBucketName": "photosharing-master-integtest-20190801110314-deployment",
+            "UnauthRoleName": "photosharing-master-integtest-20190801110314-unauthRole",
+            "StackName": "photosharing-master-integtest-20190801110314",
+            "StackId": "arn:aws:cloudformation:us-west-2:712985920941:stack/photosharing-master-integtest-20190801110314/a2105ef0-b486-11e9-a98a-0603d76d1104"
+        },
+        "categories": {
+            "auth": {
+                "photosharingmaster5cf02351": {}
+            }
+        }
+    }
+}

@@ -27,6 +27,7 @@ import android.widget.SimpleAdapter;
 import android.widget.SimpleAdapter.ViewBinder;
 import android.widget.TextView;
 
+import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.config.AWSConfiguration;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
@@ -48,6 +49,10 @@ public class DownloadSelectionActivity extends ListActivity {
     private ArrayList<HashMap<String, Object>> transferRecordMaps;
     private StorageHelper storageHelper;
     private String bucket;
+    private String userIdentityId;
+    private static final String PUBLIC_ACCESSTYPE = "public";
+    private static final String PRIVATE_ACCESSTYPE = "private";
+    private static final String PROTECTED_ACCESSTYPE = "protected";
 
     private static final String TAG = DownloadSelectionActivity.class.getSimpleName();
 
@@ -55,6 +60,7 @@ public class DownloadSelectionActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download_selection);
+        userIdentityId = AWSMobileClient.getInstance().getIdentityId();
         storageHelper = new StorageHelper(DownloadSelectionActivity.this);
         bucket = new AWSConfiguration(this).optJsonObject("S3TransferUtility").optString("Bucket");
         initData();
@@ -130,7 +136,7 @@ public class DownloadSelectionActivity extends ListActivity {
         @Override
         protected Void doInBackground(Void... inputs) {
             // Queries files in the bucket from S3.
-            s3ObjList = s3.listObjects(bucket, "public/").getObjectSummaries();
+            s3ObjList = s3.listObjects(bucket, PRIVATE_ACCESSTYPE + "/" + userIdentityId + "/").getObjectSummaries();
             transferRecordMaps.clear();
             for (S3ObjectSummary summary : s3ObjList) {
                 HashMap<String, Object> map = new HashMap<String, Object>();

@@ -25,11 +25,13 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+/**
+ * PhotoAdapter is a customized adapter to adapt photos to gridView.
+ */
 public class PhotoAdapter extends BaseAdapter {
     private Activity activity;
     private LayoutInflater inflater;
     private ArrayList<Photo> photoList;
-    private static final String TAG = PhotoAdapter.class.getSimpleName();
 
     public PhotoAdapter(Activity activity, ArrayList<Photo> photoList) {
         this.activity = activity;
@@ -67,14 +69,16 @@ public class PhotoAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) view.getTag();
         }
-
         return view;
     }
 
+    /**
+     * ViewHolder defines each cell in the gridView.
+     */
     protected class ViewHolder {
-
+        // ImageView to show the image of a photo
         protected ImageView photo_image;
-
+        // TextView to show image file name of a photo
         protected TextView photo_file_name;
     }
 }

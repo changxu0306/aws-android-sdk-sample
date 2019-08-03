@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.e(TAG, "onError: ", e);
                 new AlertDialog.Builder(LoginActivity.this)
                         .setTitle("LoginError")
-                        .setMessage("Error logging in. ")
+                        .setMessage("Error logging in. Please check your username, password and network connection.")
                         .show();
             }
         });
@@ -145,7 +145,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.e(TAG, "onError: ", e);
                         new AlertDialog.Builder(LoginActivity.this)
                                 .setTitle("LoginError")
-                                .setMessage("Error logging in. ")
+                                .setMessage("Error logging in. Please check your username, password and network connection.")
                                 .show();
                     }
                 }

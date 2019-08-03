@@ -1,0 +1,7 @@
+{
+    "integtest": {
+        "configLevel": "project",
+        "useProfile": true,
+        "profileName": "default"
+    }
+}

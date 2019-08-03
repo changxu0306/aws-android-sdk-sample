@@ -42,6 +42,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * StorageHelper maintains utilities for storage.
+ */
 public class StorageHelper {
 
     private static final String TAG = StorageHelper.class.getSimpleName();
@@ -51,9 +54,13 @@ public class StorageHelper {
     private AmazonS3Client s3Client;
     private AWSCredentialsProvider credentialsProvider;
 
+    /**
+     * Initialize an TransferUtility when create an AppSyncHelper object.
+     * @param context
+     */
     public StorageHelper(Context context) {
 
-        // Initialize the transferUtility object
+        // TransferUtility initialization
         transferUtility =
                 TransferUtility.builder()
                         .context(context.getApplicationContext())
@@ -61,6 +68,7 @@ public class StorageHelper {
                         .s3Client(new AmazonS3Client(AWSMobileClient.getInstance()))
                         .build();
 
+        // Get bucket from AWS configuration file
         bucket = new AWSConfiguration(context).optJsonObject("S3TransferUtility").optString("Bucket");
     }
 

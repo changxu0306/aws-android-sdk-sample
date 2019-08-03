@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Photo Album</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_getCredential">GetCredentialActivity</string>
     <string name="title_activity_album" >AlbumActivity</string>
     <string name="title_activity_photo">PhotoActivity</string>
     <string name="title_activity_download">DownloadActivity</string>
