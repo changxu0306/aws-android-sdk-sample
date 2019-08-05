@@ -46,8 +46,11 @@ import static org.hamcrest.Matchers.is;
 
 public class UIActionsUtil {
 
-    private static final String username = "chang";
-    private static final String password = "Xuchang2018";
+    private static final String username = "test01";
+    private static final String password = "The#test1";
+    private static final String AUTH_FORM_VIEW = "com.amazonaws.mobile.auth.userpools.FormView";
+    private static final String AUTH_FORM_EDIT_TEXT = "com.amazonaws.mobile.auth.userpools.FormEditText";
+    private static final String AUTH_UI_SIGN_VIEW = "com.amazonaws.mobile.auth.ui.SignInView";
     private static final int MAX_TIME_OUT = 60 * 1000;
     private static final String TAG = UIActionsUtil.class.getSimpleName();
 
@@ -61,14 +64,12 @@ public class UIActionsUtil {
                 ViewInteraction editText = onView(
                         allOf(childAtPosition(
                                 childAtPosition(
-                                        withClassName(is("com.amazonaws.mobile.auth.userpools.FormView")),
+                                        withClassName(is(AUTH_FORM_VIEW)),
                                         0),
                                 1),
                                 isDisplayed()));
                 break;
-                //view is displayed logic
             } catch (NoMatchingViewException e) {
-                //view not displayed logic
             } finally {
                 Thread.sleep(5000);
                 timeOut += 5000;
@@ -81,7 +82,7 @@ public class UIActionsUtil {
                 ViewInteraction editText = onView(
                         allOf(childAtPosition(
                                 childAtPosition(
-                                        withClassName(is("com.amazonaws.mobile.auth.userpools.FormView")),
+                                        withClassName(is(AUTH_FORM_VIEW)),
                                         0),
                                 1),
                                 isDisplayed()));
@@ -92,7 +93,7 @@ public class UIActionsUtil {
                 ViewInteraction editText2 = onView(
                         allOf(childAtPosition(
                                 childAtPosition(
-                                        withClassName(is("com.amazonaws.mobile.auth.userpools.FormView")),
+                                        withClassName(is(AUTH_FORM_VIEW)),
                                         0),
                                 1),
                                 isDisplayed()));
@@ -103,7 +104,7 @@ public class UIActionsUtil {
                 ViewInteraction editText3 = onView(
                         allOf(childAtPosition(
                                 childAtPosition(
-                                        withClassName(is("com.amazonaws.mobile.auth.userpools.FormEditText")),
+                                        withClassName(is(AUTH_FORM_EDIT_TEXT)),
                                         1),
                                 0),
                                 isDisplayed()));
@@ -116,7 +117,7 @@ public class UIActionsUtil {
                                 childAtPosition(
                                         allOf(withId(R.id.user_pool_sign_in_view_id),
                                                 childAtPosition(
-                                                        withClassName(is("com.amazonaws.mobile.auth.ui.SignInView")),
+                                                        withClassName(is(AUTH_UI_SIGN_VIEW)),
                                                         1)),
                                         1),
                                 isDisplayed()));
@@ -125,6 +126,7 @@ public class UIActionsUtil {
 
                 break;
             } catch (NoMatchingViewException e) {
+
             } finally {
                 Thread.sleep(5000);
                 timeOut += 5000;
@@ -132,7 +134,7 @@ public class UIActionsUtil {
         }
     }
 
-    public static void addAlbum(String name) throws InterruptedException {
+    public static void addAlbum(String albumName) {
         ViewInteraction addAlbumButton = onView(allOf(withId(R.id.album_add)));
         Log.e(TAG, "Click button to add an album - do AppSync create mutation.");
         addAlbumButton.perform(click());
@@ -146,7 +148,7 @@ public class UIActionsUtil {
                         0),
                         isDisplayed()));
         Log.e(TAG, "Enter album name.");
-        editText.perform(replaceText(name), closeSoftKeyboard());
+        editText.perform(replaceText(albumName), closeSoftKeyboard());
 
         ViewInteraction confirmButton = onView(
                 allOf(withId(android.R.id.button1), withText("Add"),

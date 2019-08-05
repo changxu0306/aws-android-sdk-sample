@@ -23,8 +23,10 @@ import android.view.ViewParent;
 
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.client.Callback;
+import com.amazonaws.mobile.client.UserState;
 import com.amazonaws.mobile.client.UserStateDetails;
 import com.amazonaws.mobile.client.results.SignInResult;
+import com.amazonaws.mobile.client.results.SignInState;
 import com.amazonaws.mobile.config.AWSConfiguration;
 import com.amazonaws.services.s3.AmazonS3Client;
 
@@ -66,6 +68,8 @@ public class StorageUITest {
     private final int MAX_TIME_OUT = 60 * 1000;
     private static final int PERMISSIONS_DIALOG_DELAY = 1000;
     private static final int GRANT_BUTTON_INDEX = 1;
+    private static final String ALBUM_NAME_FOR_TESTING = "TestStorage";
+    private static final String PHOTO_NAME_FOR_TESTING = "photo1.jpg";
     private static AmazonS3Client s3;
     private static String bucket;
 
@@ -73,7 +77,6 @@ public class StorageUITest {
 
     @Rule
     public ActivityTestRule<LoginActivity> mActivityTestRule = new ActivityTestRule<>(LoginActivity.class);
-
 
     /**
      * Do sign in and add an album in setup.
@@ -116,7 +119,6 @@ public class StorageUITest {
                 Log.e(TAG,"The view has gone back to LoginActivity.");
                 break;
             } catch (NoMatchingViewException e) {
-
             }
 
             Thread.sleep(5000);
@@ -131,7 +133,7 @@ public class StorageUITest {
             @Override
             public void onResult(SignInResult result) {
                 Log.e(TAG, "SignInResult: " + result);
-                assertEquals(result.getSignInState().toString(), "DONE");
+                assertEquals(result.getSignInState(), SignInState.DONE);
             }
 
             @Override
@@ -148,16 +150,14 @@ public class StorageUITest {
                         withId(R.id.action_bar_container),
                         0)), 0), isDisplayed()));
                 break;
-                //view is displayed logic
             } catch (NoMatchingViewException e) {
-                //view not displayed logic;
             } finally {
                 Thread.sleep(5000);
                 timeOut += 5000;
             }
         }
 
-        UIActionsUtil.addAlbum("TestStorage");
+        UIActionsUtil.addAlbum(ALBUM_NAME_FOR_TESTING);
 
         UIActionsUtil.clickEdit();
     }
@@ -238,12 +238,10 @@ public class StorageUITest {
         timeOut = 0;
         while (timeOut < MAX_TIME_OUT) {
             try {
-                onView(withText("photo1.jpg")).check(matches(isDisplayed()));
+                onView(withText(PHOTO_NAME_FOR_TESTING)).check(matches(isDisplayed()));
                 Log.e(TAG, "Download succeed.");
                 break;
-                //view is displayed logic
             } catch (NoMatchingViewException e) {
-                //view not displayed logic;
             }
             Thread.sleep(5000);
             timeOut += 5000;
@@ -266,9 +264,7 @@ public class StorageUITest {
                             withId(R.id.action_bar_container),
                             0)), 0), isDisplayed()));
                     break;
-                    //view is displayed logic
                 } catch (NoMatchingViewException e) {
-                    //view not displayed logic;
                 } finally {
                     Thread.sleep(5000);
                     timeOut += 5000;
@@ -288,14 +284,16 @@ public class StorageUITest {
 
             // assert the album has been deleted successfully
             ViewInteraction textView2 = onView(
-                    allOf(withId(R.id.album_name), withText("TestStorage")));
+                    allOf(withId(R.id.album_name), withText(ALBUM_NAME_FOR_TESTING)));
             textView2.check(doesNotExist());
             Log.e(TAG, "An album is deleted successfully!");
+
+            UIActionsUtil.clickSignOut();
 
             UIActionsUtil.signOut();
 
             // Check if user successfully signed out
-            assertEquals(AWSMobileClient.getInstance().currentUserState().getUserState().toString(), "SIGNED_OUT");
+            assertEquals(AWSMobileClient.getInstance().currentUserState().getUserState(), UserState.SIGNED_OUT);
 
             // Check if goes back to LoginActivity
             timeOut = 0;
@@ -313,8 +311,6 @@ public class StorageUITest {
                 timeOut += 5000;
             }
 
-            // Clean Up bucket
-            s3.deleteObject(bucket, "public/chang/photo1.jpg");
         } catch (Exception e) {
             Log.e(TAG, "Error on tear down: " + e);
         }

@@ -14,8 +14,10 @@ import android.view.ViewParent;
 
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.client.Callback;
+import com.amazonaws.mobile.client.UserState;
 import com.amazonaws.mobile.client.UserStateDetails;
 import com.amazonaws.mobile.client.results.SignInResult;
+import com.amazonaws.mobile.client.results.SignInState;
 import com.amazonaws.mobile.config.AWSConfiguration;
 
 import org.hamcrest.Description;
@@ -45,9 +47,9 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(AndroidJUnit4.class)
 public class AppSyncQueryUITest {
 
-    private final int MAX_TIME_OUT = 60 * 1000;
-
-    private final String TAG = AppSyncMutationUITest.class.getSimpleName();
+    private static final int MAX_TIME_OUT = 60 * 1000;
+    private static final String ALBUM_NAME_FOR_TESTING = "TestAppSync";
+    private static final String TAG = AppSyncMutationUITest.class.getSimpleName();
 
     @Rule
     public ActivityTestRule<LoginActivity> mActivityTestRule = new ActivityTestRule<>(LoginActivity.class);
@@ -86,7 +88,6 @@ public class AppSyncQueryUITest {
                 Log.e(TAG,"The view has gone back to LoginActivity.");
                 break;
             } catch (NoMatchingViewException e) {
-
             }
 
             Thread.sleep(5000);
@@ -101,7 +102,7 @@ public class AppSyncQueryUITest {
             @Override
             public void onResult(SignInResult result) {
                 Log.e(TAG, "SignInResult: " + result);
-                assertEquals(result.getSignInState().toString(), "DONE");
+                assertEquals(result.getSignInState(), SignInState.DONE);
             }
 
             @Override
@@ -118,40 +119,16 @@ public class AppSyncQueryUITest {
                         withId(R.id.action_bar_container),
                         0)), 0), isDisplayed()));
                 break;
-                //view is displayed logic
             } catch (NoMatchingViewException e) {
-                //view not displayed logic;
             } finally {
                 Thread.sleep(5000);
                 timeOut += 5000;
             }
         }
 
-        UIActionsUtil.addAlbum("TestAppSync");
+        UIActionsUtil.addAlbum(ALBUM_NAME_FOR_TESTING);
 
     }
-
-//    @Test
-//    public void createAndDeleteTest() throws InterruptedException {
-//
-////        UIActionsUtil.addAlbum("TestAppSync");
-//        Thread.sleep(3000);
-//
-//        UIActionsUtil.clickEdit();
-//
-//        // Check if the album is added successfully
-//        ViewInteraction textView = onView(
-//                allOf(withId(R.id.album_name), withText("TestAppSync"),
-//                        childAtPosition(
-//                                childAtPosition(
-//                                        withId(R.id.gw_lstAlbum),
-//                                        0),
-//                                2),
-//                        isDisplayed()));
-//        textView.check(matches(withText("TestAppSync")));
-//        Log.e(TAG, "An album is added successfully!");
-//    }
-
 
     @Test
     public void testListQuery() throws InterruptedException {
@@ -166,7 +143,6 @@ public class AppSyncQueryUITest {
                 Log.e(TAG,"The view has gone back to LoginActivity.");
                 break;
             } catch (NoMatchingViewException e) {
-
             }
 
             Thread.sleep(5000);
@@ -184,9 +160,7 @@ public class AppSyncQueryUITest {
                         withId(R.id.action_bar_container),
                         0)), 0), isDisplayed()));
                 break;
-                //view is displayed logic
             } catch (NoMatchingViewException e) {
-                //view not displayed logic
             } finally {
                 Thread.sleep(5000);
                 timeOut += 5000;
@@ -195,40 +169,53 @@ public class AppSyncQueryUITest {
 
         // Check if albums are listed from AppSync.
         ViewInteraction textView = onView(
-                allOf(withId(R.id.album_name), withText("TestAppSync"),
+                allOf(withId(R.id.album_name), withText(ALBUM_NAME_FOR_TESTING),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.gw_lstAlbum),
                                         0),
                                 2),
                         isDisplayed()));
-        textView.check(matches(withText("TestAppSync")));
+        textView.check(matches(withText(ALBUM_NAME_FOR_TESTING)));
         Log.e(TAG, "List query succeed.");
+
+        UIActionsUtil.clickEdit();
+
+        // Delete an album
+        ViewInteraction appCompatButton2 = onView(
+                allOf(withId(R.id.delete_album),
+                        childAtPosition(
+                                withParent(withId(R.id.gw_lstAlbum)),
+                                1),
+                        isDisplayed()));
+        Log.e(TAG, "Click delete button.");
+        appCompatButton2.perform(click());
+
+        // assert the album has been deleted successfully
+        timeOut = 0;
+        while (timeOut < MAX_TIME_OUT) {
+            try {
+                ViewInteraction textView2 = onView(
+                        allOf(withId(R.id.album_name), withText(ALBUM_NAME_FOR_TESTING)));
+                textView2.check(doesNotExist());
+                Log.e(TAG, "An album is deleted successfully!");
+                break;
+            } catch (NoMatchingViewException e) {
+            }
+            Thread.sleep(5000);
+            timeOut += 5000;
+        }
+
+        UIActionsUtil.clickSignOut();
     }
 
     @After
     public void tearDown() {
         try {
-            // Delete an album
-            ViewInteraction appCompatButton2 = onView(
-                    allOf(withId(R.id.delete_album),
-                            childAtPosition(
-                                    withParent(withId(R.id.gw_lstAlbum)),
-                                    1),
-                            isDisplayed()));
-            Log.e(TAG, "Click delete button.");
-            appCompatButton2.perform(click());
 
-            // assert the album has been deleted successfully
-            ViewInteraction textView2 = onView(
-                    allOf(withId(R.id.album_name), withText("TestAppSync")));
-            textView2.check(doesNotExist());
-            Log.e(TAG, "An album is deleted successfully!");
-
-            UIActionsUtil.clickSignOut();
             UIActionsUtil.signOut();
             // Check if user successfully signed out
-            assertEquals(AWSMobileClient.getInstance().currentUserState().getUserState().toString(), "SIGNED_OUT");
+            assertEquals(AWSMobileClient.getInstance().currentUserState().getUserState(), UserState.SIGNED_OUT);
 
             // Check if goes back to LoginActivity
             int timeOut = 0;
@@ -239,9 +226,7 @@ public class AppSyncQueryUITest {
                     Log.e(TAG,"The view has gone back to LoginActivity.");
                     break;
                 } catch (NoMatchingViewException e) {
-
                 }
-
                 Thread.sleep(5000);
                 timeOut += 5000;
             }
