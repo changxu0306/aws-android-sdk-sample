@@ -64,6 +64,7 @@ public class AppSyncMutationUITest {
 
     private static final int MAX_TIME_OUT = 60 * 1000;
     private final static String ALBUM_NAME_FOR_TESTING = "TestAppSync";
+    private final static String ALBUM_ACTIVITY_CLASS_NAME = AlbumActivity.class.getSimpleName();
     private final static String TAG = AppSyncMutationUITest.class.getSimpleName();
 
     @Rule
@@ -130,7 +131,7 @@ public class AppSyncMutationUITest {
         timeOut = 0;
         while (timeOut < MAX_TIME_OUT) {
             try {
-                onView(allOf(withText("AlbumActivity"), childAtPosition(allOf(withId(R.id.action_bar), childAtPosition(
+                onView(allOf(withText(ALBUM_ACTIVITY_CLASS_NAME), childAtPosition(allOf(withId(R.id.action_bar), childAtPosition(
                         withId(R.id.action_bar_container),
                         0)), 0), isDisplayed()));
                 break;
