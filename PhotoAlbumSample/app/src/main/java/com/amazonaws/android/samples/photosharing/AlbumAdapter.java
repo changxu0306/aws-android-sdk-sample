@@ -43,6 +43,7 @@ public class AlbumAdapter extends BaseAdapter {
     private static final String INDEX = "index";
     private static final String REQUEST_CODE = "ReqCode";
     private static final String NEW_ALBUM_NAME = "newAlbumName";
+    private static final String ALBUM_INDEX = "AlbumIndex";
     private static final int DELETE_REQUEST_CODE = 1;
     private static final int UPDATE_REQUEST_CODE = 2;
 
@@ -137,7 +138,7 @@ public class AlbumAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(activity, PhotoActivity.class);
-                    intent.putExtra("AlbumIndex", position);
+                    intent.putExtra(ALBUM_INDEX, position);
                     activity.startActivity(intent);
                 }
             });

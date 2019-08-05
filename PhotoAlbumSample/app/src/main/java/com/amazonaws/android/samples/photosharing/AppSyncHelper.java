@@ -81,7 +81,7 @@ public class AppSyncHelper {
         @Override
         public void onResponse(@Nonnull Response<CreateAlbumMutation.Data> response) {
             String albumName = response.data().createAlbum().name();
-            Log.i(TAG, "An album with name" + albumName + "is created successfully.");
+            Log.i(TAG, "An album with name " + albumName + " is created successfully.");
         }
 
         @Override
@@ -95,7 +95,7 @@ public class AppSyncHelper {
         @Override
         public void onResponse(@Nonnull Response<DeleteAlbumMutation.Data> response) {
             String albumName = response.data().deleteAlbum().name();
-            Log.i(TAG, "An album with name" + albumName + "is deleted successfully.");
+            Log.i(TAG, "An album with name " + albumName + " is deleted successfully.");
         }
 
         @Override
@@ -109,7 +109,7 @@ public class AppSyncHelper {
         @Override
         public void onResponse(@Nonnull Response<UpdateAlbumMutation.Data> response) {
             String albumName = response.data().updateAlbum().name();
-            Log.i(TAG, "An album with name" + albumName + "is updated successfully.");
+            Log.i(TAG, "An album with name " + albumName + " is updated successfully.");
         }
 
         @Override
@@ -119,6 +119,12 @@ public class AppSyncHelper {
         }
     };
 
+    /**
+     * Do create album mutation in AppSync.
+     * @param albumName
+     * @param userName
+     * @param accessType
+     */
     public void createAlbum(final String albumName, final String userName, final String accessType) {
 
         CreateAlbumInput createAlbumInput = CreateAlbumInput.builder()
@@ -131,6 +137,10 @@ public class AppSyncHelper {
                 .enqueue(createAlbumCallback);
     }
 
+    /**
+     * Do delete album mutation in AppSync.
+     * @param albumId
+     */
     public void deleteAlbum(final String albumId) {
 
         DeleteAlbumInput deleteAlbumInput = DeleteAlbumInput.builder()
@@ -152,7 +162,7 @@ public class AppSyncHelper {
     }
 
     /**
-     *
+     * Do list query from AppSync to get a list of albums.
      * @return
      */
     public ArrayList<Album> listAlbums() {
@@ -160,7 +170,8 @@ public class AppSyncHelper {
 
         final CountDownLatch listAlbumsLatch = new CountDownLatch(1);
         // limit is set to ensure the all the albums can be queried successfully if the number of albums is less than or equal to 30.
-        // The number of limit can be adjusted by customers.
+        // The number 30 is chosen for limit because usually the number of albums will not exceed 30.
+        // This number can be adjusted by customers.
 
         // Using NETWORK_ONLY state is set to AppSyncResponseFetcher in case deleted albums still stay in cache.
         mAWSAppSyncClient.query(ListAlbumsQuery.builder().limit(30).build()).responseFetcher(AppSyncResponseFetchers.NETWORK_ONLY)
@@ -188,6 +199,7 @@ public class AppSyncHelper {
         });
 
         try {
+            // wait for query callback
             listAlbumsLatch.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -199,7 +211,7 @@ public class AppSyncHelper {
         @Override
         public void onResponse(@Nonnull Response<CreatePhotoMutation.Data> response) {
             String photoName = response.data().createPhoto().name();
-            Log.i(TAG, "A photo with name" + photoName + "is created successfully.");
+            Log.i(TAG, "A photo with name " + photoName + " is created successfully.");
         }
 
         @Override
@@ -209,6 +221,13 @@ public class AppSyncHelper {
         }
     };
 
+    /**
+     * Do create photo mutation in AppSync.
+     * @param albumName
+     * @param albumID
+     * @param photoS3key
+     * @param photoS3Bucket
+     */
     public void createPhoto(final String albumName, final String albumID, final String photoS3key, final String photoS3Bucket) {
 
         CreatePhotoInput createPhotoInput = CreatePhotoInput.builder()

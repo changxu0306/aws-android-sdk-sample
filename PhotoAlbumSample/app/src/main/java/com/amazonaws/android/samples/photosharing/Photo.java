@@ -32,7 +32,14 @@ public class Photo {
     // photo file in Bitmap format
     private Bitmap file;
 
-    // Constructor
+    /**
+     * Constructor of Photo object.
+     * @param photoId
+     * @param name
+     * @param bucket
+     * @param key
+     * @param file
+     */
     public Photo(String photoId, String name, String bucket, String key, Bitmap file) {
         this.photoId = photoId;
         this.name = name;

@@ -71,9 +71,11 @@ public class PhotoActivity extends AppCompatActivity {
     private static final int UPLOAD_REQUEST_CODE = 0;
     private static final int DOWNLOAD_SELECTION_REQUEST_CODE = 1;
     private static final int REQUEST_WRITE_STORAGE = 112;
+    private static final int DEFAULT_VALUE_OF_REQUEST_CODE = -1;
     private static final String PUBLIC_ACCESSTYPE = "public";
     private static final String PRIVATE_ACCESSTYPE = "private";
     private static final String PROTECTED_ACCESSTYPE = "protected";
+    private static final String ALBUM_INDEX = "AlbumIndex";
 
     private static String bucket;
     public static String username;
@@ -140,9 +142,9 @@ public class PhotoActivity extends AppCompatActivity {
         initUI();
 
         // if this view comes from AlbumActivity
-        if (getIntent().getIntExtra("AlbumIndex",-1) != -1) {
+        if (getIntent().getIntExtra(ALBUM_INDEX, DEFAULT_VALUE_OF_REQUEST_CODE) != DEFAULT_VALUE_OF_REQUEST_CODE) {
 
-            indexOfAlbumClicked = getIntent().getIntExtra("AlbumIndex",0);
+            indexOfAlbumClicked = getIntent().getIntExtra(ALBUM_INDEX,0);
             currentAlbumGraphQLid = appSyncHelper.listAlbums().get(indexOfAlbumClicked).getId();
             photoList = appSyncHelper.listAlbums().get(indexOfAlbumClicked).getPhotos();
 
@@ -211,6 +213,9 @@ public class PhotoActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Make a request to get permission to write to external storage.
+     */
     protected void makeRequest() {
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -238,24 +243,6 @@ public class PhotoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.photo_add:
-                // this is for user to choose an image file from device.
-//                Intent intent = new Intent();
-//                if (Build.VERSION.SDK_INT >= 19) {
-//                    // For Android KitKat, we use a different intent to ensure we can get the file path from the returned intent URI
-//                    intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
-//                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-//                    intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-//                    intent.setType("*/*");
-//                } else {
-//                    intent.setAction(Intent.ACTION_GET_CONTENT);
-//                    intent.setType("file/*");
-//                }
-//
-//                startActivityForResult(intent, UPLOAD_REQUEST_CODE);
-
-                // Choose an image file from res/drawable directory randomly in the future
-//                Random random = new Random();
-//                int randomInt = random.nextInt();
                 File imageFile = storageHelper.saveDrawableAsFile(this, R.drawable.photo1, resToFileName.get(R.drawable.photo1));
                 beginUpload(imageFile);
                 return true;
@@ -298,8 +285,6 @@ public class PhotoActivity extends AppCompatActivity {
             @Override
             public void onStateChanged(int id, TransferState state) {
                 if (state.equals(TransferState.COMPLETED)) {
-                    Toast.makeText(PhotoActivity.this, "Upload succeed!",
-                            Toast.LENGTH_LONG).show();
 
                     AlertDialog alertDialog = new AlertDialog.Builder(PhotoActivity.this)
                             .setTitle("Upload Succeed Message")
@@ -319,7 +304,8 @@ public class PhotoActivity extends AppCompatActivity {
 
             @Override
             public void onError(int id, Exception ex) {
-
+                Log.e(TAG, "Error on transfer: " + ex);
+                ex.printStackTrace();
             }
         });
     }
