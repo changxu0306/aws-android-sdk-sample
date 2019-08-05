@@ -46,6 +46,7 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(AndroidJUnit4.class)
 public class AuthUITest {
 
+    private final static String ALBUM_ACTIVITY_CLASS_NAME = AlbumActivity.class.getSimpleName();
     private static final String TAG = AuthUITest.class.getSimpleName();
     private static final int MAX_TIME_OUT = 60 * 1000;
 
@@ -121,7 +122,7 @@ public class AuthUITest {
         int timeOut = 0;
         while (timeOut < MAX_TIME_OUT) {
             try {
-                onView(allOf(withText("AlbumActivity"), childAtPosition(allOf(withId(R.id.action_bar), childAtPosition(
+                onView(allOf(withText(ALBUM_ACTIVITY_CLASS_NAME), childAtPosition(allOf(withId(R.id.action_bar), childAtPosition(
                         withId(R.id.action_bar_container),
                         0)), 0), isDisplayed()));
                 break;
