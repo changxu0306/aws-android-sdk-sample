@@ -29,8 +29,10 @@ import android.view.ViewParent;
 
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.client.Callback;
+import com.amazonaws.mobile.client.UserState;
 import com.amazonaws.mobile.client.UserStateDetails;
 import com.amazonaws.mobile.client.results.SignInResult;
+import com.amazonaws.mobile.client.results.SignInState;
 import com.amazonaws.mobile.config.AWSConfiguration;
 
 import org.hamcrest.Description;
@@ -60,9 +62,9 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(AndroidJUnit4.class)
 public class AppSyncMutationUITest {
 
-    private final int MAX_TIME_OUT = 60 * 1000;
-
-    private final String TAG = AppSyncMutationUITest.class.getSimpleName();
+    private static final int MAX_TIME_OUT = 60 * 1000;
+    private final static String ALBUM_NAME_FOR_TESTING = "TestAppSync";
+    private final static String TAG = AppSyncMutationUITest.class.getSimpleName();
 
     @Rule
     public ActivityTestRule<LoginActivity> mActivityTestRule = new ActivityTestRule<>(LoginActivity.class);
@@ -70,7 +72,7 @@ public class AppSyncMutationUITest {
     @Before
     public void setUp() throws Exception {
         Context appContext = InstrumentationRegistry.getTargetContext();
-//        UIActionsUtil.signOut();
+
         final CountDownLatch latch = new CountDownLatch(1);
         AWSMobileClient.getInstance().initialize(appContext, new Callback<UserStateDetails>() {
             @Override
@@ -101,7 +103,6 @@ public class AppSyncMutationUITest {
                 Log.e(TAG,"The view has gone back to LoginActivity.");
                 break;
             } catch (NoMatchingViewException e) {
-
             }
 
             Thread.sleep(5000);
@@ -116,7 +117,7 @@ public class AppSyncMutationUITest {
             @Override
             public void onResult(SignInResult result) {
                 Log.e(TAG, "SignInResult: " + result);
-                assertEquals(result.getSignInState().toString(), "DONE");
+                assertEquals(result.getSignInState(), SignInState.DONE);
             }
 
             @Override
@@ -133,26 +134,24 @@ public class AppSyncMutationUITest {
                         withId(R.id.action_bar_container),
                         0)), 0), isDisplayed()));
                 break;
-                //view is displayed logic
             } catch (NoMatchingViewException e) {
-                //view not displayed logic
             } finally {
                 Thread.sleep(5000);
                 timeOut += 5000;
             }
         }
 
-        UIActionsUtil.addAlbum("TestAppSync");
+        UIActionsUtil.addAlbum(ALBUM_NAME_FOR_TESTING);
 
     }
 
     @Test
-    public void createAndDeleteTest() throws InterruptedException {
+    public void testCreateAndDelete() {
 
         UIActionsUtil.clickEdit();
 
         // Check if the album is added successfully
-        onView(withText("TestAppSync")).check(matches(isDisplayed()));
+        onView(withText(ALBUM_NAME_FOR_TESTING)).check(matches(isDisplayed()));
 
         Log.e(TAG, "An album is added successfully!");
 
@@ -168,59 +167,19 @@ public class AppSyncMutationUITest {
 
         // assert the album has been deleted successfully
         ViewInteraction textView2 = onView(
-                allOf(withId(R.id.album_name), withText("TestAppSync")));
+                allOf(withId(R.id.album_name), withText(ALBUM_NAME_FOR_TESTING)));
         textView2.check(doesNotExist());
         Log.e(TAG, "An album is deleted successfully!");
 
         UIActionsUtil.clickSignOut();
     }
 
-
-//    @Test
-//    public void testListQuery() throws InterruptedException {
-//        // Sign out
-//        UIActionsUtil.clickSignOut();
-//
-//        //Sign in
-//        UIActionsUtil.signIn(UIActionsUtil.getUsername(), UIActionsUtil.getPassword());
-//
-//        // Check if it jumps into AlbumActivity
-//        int timeOut = 0;
-//        while (timeOut < MAX_TIME_OUT) {
-//            try {
-//                onView(allOf(withText("AlbumActivity"), childAtPosition(allOf(withId(R.id.action_bar), childAtPosition(
-//                        withId(R.id.action_bar_container),
-//                        0)), 0), isDisplayed()));
-//                break;
-//                //view is displayed logic
-//            } catch (NoMatchingViewException e) {
-//                //view not displayed logic
-//            } finally {
-//                Thread.sleep(5000);
-//                timeOut += 5000;
-//            }
-//        }
-//
-//        // Check if albums are listed from AppSync.
-//        ViewInteraction textView = onView(
-//                allOf(withId(R.id.album_name), withText("TestAppSync"),
-//                        childAtPosition(
-//                                childAtPosition(
-//                                        withId(R.id.gw_lstAlbum),
-//                                        0),
-//                                2),
-//                        isDisplayed()));
-//        textView.check(matches(withText("TestAppSync")));
-//        Log.e(TAG, "List query succeed.");
-//    }
-
-
     @After
     public void tearDown() {
         try {
             UIActionsUtil.signOut();
             // Check if user successfully signed out
-            assertEquals(AWSMobileClient.getInstance().currentUserState().getUserState().toString(), "SIGNED_OUT");
+            assertEquals(AWSMobileClient.getInstance().currentUserState().getUserState(), UserState.SIGNED_OUT);
 
             // Check if goes back to LoginActivity
             int timeOut = 0;
@@ -231,7 +190,6 @@ public class AppSyncMutationUITest {
                     Log.e(TAG,"The view has gone back to LoginActivity.");
                     break;
                 } catch (NoMatchingViewException e) {
-
                 }
 
                 Thread.sleep(5000);

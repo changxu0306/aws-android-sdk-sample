@@ -19,6 +19,7 @@ import com.amazonaws.mobile.client.UserState;
 import com.amazonaws.mobile.client.UserStateDetails;
 import com.amazonaws.mobile.client.UserStateListener;
 import com.amazonaws.mobile.client.results.SignInResult;
+import com.amazonaws.mobile.client.results.SignInState;
 import com.amazonaws.mobile.config.AWSConfiguration;
 
 import org.hamcrest.Description;
@@ -45,8 +46,8 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(AndroidJUnit4.class)
 public class AuthUITest {
 
-    private final String TAG = AuthUITest.class.getSimpleName();
-    private final int MAX_TIME_OUT = 60 * 1000;
+    private static final String TAG = AuthUITest.class.getSimpleName();
+    private static final int MAX_TIME_OUT = 60 * 1000;
 
     @Rule
     public ActivityTestRule<LoginActivity> mActivityTestRule = new ActivityTestRule<>(LoginActivity.class);
@@ -90,7 +91,7 @@ public class AuthUITest {
         Log.e(TAG, "Cognito User Pool has been configured.");
 
         assertNotNull(awsConfiguration.optJsonObject("CredentialsProvider"));
-        Log.e(TAG, "Credential Provider has been configured.");
+        Log.e(TAG, "Credentials Provider has been configured.");
     }
 
     /**
@@ -107,7 +108,7 @@ public class AuthUITest {
             @Override
             public void onResult(SignInResult result) {
                 Log.e(TAG, "SignInResult: " + result);
-                assertEquals(result.getSignInState().toString(), "DONE");
+                assertEquals(result.getSignInState(), SignInState.DONE);
             }
 
             @Override
@@ -124,9 +125,8 @@ public class AuthUITest {
                         withId(R.id.action_bar_container),
                         0)), 0), isDisplayed()));
                 break;
-                //view is displayed logic
             } catch (NoMatchingViewException e) {
-                //view not displayed logic;
+                Log.e(TAG, "Can not find matching view: " + e);
             } finally {
                 Thread.sleep(5000);
                 timeOut += 5000;
@@ -146,13 +146,12 @@ public class AuthUITest {
                 Log.e(TAG,"The view has gone back to LoginActivity.");
                 break;
             } catch (NoMatchingViewException e) {
-
+                Log.e(TAG, "Can not find matching view: " + e);
             }
 
             Thread.sleep(5000);
             timeOut += 5000;
         }
-
     }
 
     @After
@@ -161,7 +160,7 @@ public class AuthUITest {
             UIActionsUtil.signOut();
 
             // Check if user successfully signed out
-            assertEquals(AWSMobileClient.getInstance().currentUserState().getUserState().toString(), "SIGNED_OUT");
+            assertEquals(AWSMobileClient.getInstance().currentUserState().getUserState(), UserState.SIGNED_OUT);
 
         } catch (Exception e) {
             Log.e(TAG, "Error on tear down: " + e);

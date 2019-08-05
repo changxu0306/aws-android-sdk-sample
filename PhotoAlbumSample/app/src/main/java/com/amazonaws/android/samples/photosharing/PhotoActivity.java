@@ -253,7 +253,7 @@ public class PhotoActivity extends AppCompatActivity {
 //
 //                startActivityForResult(intent, UPLOAD_REQUEST_CODE);
 
-                // Choose an image file from res/drawable directory randomly
+                // Choose an image file from res/drawable directory randomly in the future
 //                Random random = new Random();
 //                int randomInt = random.nextInt();
                 File imageFile = storageHelper.saveDrawableAsFile(this, R.drawable.photo1, resToFileName.get(R.drawable.photo1));
@@ -269,21 +269,6 @@ public class PhotoActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//  this part is for future use
-
-//        if (requestCode == UPLOAD_REQUEST_CODE) {
-//            if (resultCode == Activity.RESULT_OK) {
-//                Uri uri = data.getData();
-//                try {
-//                    String path = getPath(uri);
-//                    beginUpload(path);
-//                } catch (URISyntaxException e) {
-//                    Toast.makeText(this,
-//                            "Unable to get the file from the given URI. See error log for details",
-//                            Toast.LENGTH_LONG).show();
-//                    Log.e(TAG, "Unable to upload file from the given uri", e);
-//                }
-//            }
         if (requestCode == DOWNLOAD_SELECTION_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 // Start downloading with the key they selected in the DownloadSelectionActivity screen.

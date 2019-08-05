@@ -58,4 +58,4 @@ def store_uitest_results(ui_test, app_root_directory, uitest_results_directory):
         print('Can not find file ' + filename + '\n')
         print(str(err))
         exit(1)
-build_and_uitest(circleci_root_directory='/Users/cxuam/Desktop', app_repo_root_directory='/Users/cxuam/aws-android-sdk-sample', app_name='PhotoAlbumSample')
+# build_and_uitest(circleci_root_directory='/Users/cxuam/Desktop', app_repo_root_directory='/Users/cxuam/aws-android-sdk-sample', app_name='PhotoAlbumSample')
