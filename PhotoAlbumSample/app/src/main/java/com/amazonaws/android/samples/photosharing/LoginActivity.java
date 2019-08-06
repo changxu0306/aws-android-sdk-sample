@@ -15,6 +15,7 @@
 
 package com.amazonaws.android.samples.photosharing;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -95,9 +96,9 @@ public class LoginActivity extends AppCompatActivity {
             public void onError(Exception e) {
                 Log.e(TAG, "onError: ", e);
                 new AlertDialog.Builder(LoginActivity.this)
-                            .setTitle("LoginError")
-                            .setMessage("Error logging in. ")
-                            .show();
+                        .setTitle("LoginError")
+                        .setMessage("Error logging in. Please check your username, password and network connection.")
+                        .show();
             }
         });
     }
@@ -144,9 +145,9 @@ public class LoginActivity extends AppCompatActivity {
                     public void onError(Exception e) {
                         Log.e(TAG, "onError: ", e);
                         new AlertDialog.Builder(LoginActivity.this)
-                                    .setTitle("LoginError")
-                                    .setMessage("Error logging in. ")
-                                    .show();
+                                .setTitle("LoginError")
+                                .setMessage("Error logging in. Please check your username, password and network connection.")
+                                .show();
                     }
                 }
         );

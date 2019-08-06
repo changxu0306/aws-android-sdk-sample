@@ -19,7 +19,7 @@
         android:layout_height="30dp"
         android:background="@android:drawable/ic_menu_close_clear_cancel" />
 
-    <EditText
+    <TextView
         android:id="@+id/album_name"
         android:singleLine="true"
         android:selectAllOnFocus="true"

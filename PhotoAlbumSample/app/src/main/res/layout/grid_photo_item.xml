@@ -13,26 +13,12 @@
         android:scaleType="centerCrop"
         app:srcCompat="@mipmap/ic_launcher" />
 
-    <!--<Button-->
-        <!--android:id="@+id/delete_photo"-->
-        <!--android:layout_width="30dp"-->
-        <!--android:layout_height="30dp"-->
-        <!--android:background="@android:drawable/ic_menu_close_clear_cancel" />-->
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="160dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/photo_file_name"
-        android:layout_marginBottom="-130dp" />
-
     <TextView
         android:id="@+id/photo_file_name"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/album_image"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="110dp"
         android:gravity="center"
         android:maxLines="1"
         android:text="file name"
