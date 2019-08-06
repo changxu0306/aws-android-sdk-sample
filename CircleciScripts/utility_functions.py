@@ -3,6 +3,7 @@ from subprocess import Popen, PIPE, TimeoutExpired
 import os
 from datetime import datetime
 import platform
+import re
 
 def runcommand(command, timeout=0, pipein = None, pipeout = None, logcommandline = True,  workingdirectory = None, exception_to_raise = None):
     if logcommandline:
@@ -29,14 +30,33 @@ def runcommand(command, timeout=0, pipein = None, pipeout = None, logcommandline
         raise exception_to_raise
     return exit_code
 
+def getmodules(root):
+    with open(os.path.join(root, "settings.gradle")) as f:
+        lines = f.readlines()
+    modules = []
+    for line in lines:
+        m = re.match(".*':(aws-android-sdk-.*).*'", line)
+        if m is not None:
+            modules.append(m.group(1))
+        else:
+            print("{0} is not a sdk module ".format(line))
+    return modules
+ #replace is a dictionary. it has a format
+ #{
+ # "exclude:string"
+ # "match":string,
+ # "replace":string
+ # "files" : [
+ # string,
+ # ]
+ # match and replace will be used by sed command like  sed -E 's/{match}/{replace}/'
+ # please check with sed document to see how to handle escape characaters in match and replace
+ #}
 def replacefiles(root, replaces):
     for replaceaction in replaces:
         match = replaceaction["match"]
         replace = replaceaction["replace"]
         files = replaceaction["files"]
-        enclosemark = "'"
-        if "enclosemark" in replaceaction and replaceaction['enclosemark'] == "double" :
-            enclosemark = '"'
         paramters = "-r -i''"
         if platform.system() == "Darwin":
             paramters = "-E -i ''"
@@ -45,4 +65,4 @@ def replacefiles(root, replaces):
             exclude = "/{0}/ ! ".format(replaceaction['exclude'])
         for file in files:
             targetfile = os.path.join(root, file)
-            runcommand(command = "sed {4}   {5}{3}s/{0}/{1}/{5}  '{2}'".format(match, replace, targetfile, exclude, paramters, enclosemark), logcommandline = True)
+            runcommand(command = "sed {4}   '{3}s/{0}/{1}/'  '{2}'".format(match, replace, targetfile, exclude, paramters), logcommandline = True)
