@@ -137,7 +137,7 @@ public class PhotoActivity extends AppCompatActivity {
         btnDownload = (Button) findViewById(R.id.buttonDownload);
         photoGridView = findViewById(R.id.gw_lstPhoto);
         photoList = new ArrayList<Photo>();
-        refresh();
+        updatePhotoGridViewWithPhotos();
 
         initUI();
 
@@ -148,14 +148,14 @@ public class PhotoActivity extends AppCompatActivity {
             currentAlbumGraphQLid = appSyncHelper.listAlbums().get(indexOfAlbumClicked).getId();
             photoList = appSyncHelper.listAlbums().get(indexOfAlbumClicked).getPhotos();
 
-            refresh();
+            updatePhotoGridViewWithPhotos();
         }
     }
 
     /**
      * Refresh the current view with the latest data.
      */
-    public void refresh() {
+    public void updatePhotoGridViewWithPhotos() {
         mAdapter = new PhotoAdapter(this, photoList);
         photoGridView.setAdapter(mAdapter);
     }
@@ -327,7 +327,7 @@ public class PhotoActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
 
                     photoList.add(new Photo("123", file.getName(), bucket, key, BitmapFactory.decodeFile(file.getPath())));
-                    refresh();
+                    updatePhotoGridViewWithPhotos();
                 }
             }
 

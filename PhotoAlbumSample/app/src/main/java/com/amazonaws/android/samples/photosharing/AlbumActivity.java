@@ -64,7 +64,7 @@ public class AlbumActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album);
 
-        appSyncHelper = new AppSyncHelper(this);
+        appSyncHelper = new AppSyncHelper(AlbumActivity.this);
 
         username = getUsername();
 

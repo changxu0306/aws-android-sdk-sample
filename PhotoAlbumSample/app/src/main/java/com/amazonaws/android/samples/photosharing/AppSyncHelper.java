@@ -15,6 +15,7 @@
 
 package com.amazonaws.android.samples.photosharing;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
 
@@ -49,7 +50,7 @@ import type.UpdateAlbumInput;
 public class AppSyncHelper {
 
     private static final String TAG = AppSyncHelper.class.getSimpleName();
-
+    private static Context CURRENT_CONTEXT;
     private AWSAppSyncClient mAWSAppSyncClient;
 
     /**
@@ -75,6 +76,8 @@ public class AppSyncHelper {
                 })
             .build();
 
+        CURRENT_CONTEXT = context;
+
     }
 
     private GraphQLCall.Callback<CreateAlbumMutation.Data> createAlbumCallback = new GraphQLCall.Callback<CreateAlbumMutation.Data>() {
@@ -87,6 +90,11 @@ public class AppSyncHelper {
         @Override
         public void onFailure(@Nonnull ApolloException e) {
             Log.i(TAG, "Failed to create an album.");
+            AlertDialog alertDialog = new AlertDialog.Builder(CURRENT_CONTEXT)
+                    .setTitle("Create album failed.")
+                    .setPositiveButton("CLOSE", null)
+                    .create();
+            alertDialog.show();
             e.printStackTrace();
         }
     };
@@ -101,6 +109,11 @@ public class AppSyncHelper {
         @Override
         public void onFailure(@Nonnull ApolloException e) {
             Log.i(TAG, "Failed to delete an album.");
+            AlertDialog alertDialog = new AlertDialog.Builder(CURRENT_CONTEXT)
+                    .setTitle("Delete album failed.")
+                    .setPositiveButton("CLOSE", null)
+                    .create();
+            alertDialog.show();
             e.printStackTrace();
         }
     };
@@ -115,6 +128,11 @@ public class AppSyncHelper {
         @Override
         public void onFailure(@Nonnull ApolloException e) {
             Log.i(TAG, "Failed to update an album.");
+            AlertDialog alertDialog = new AlertDialog.Builder(CURRENT_CONTEXT)
+                    .setTitle("Update album failed.")
+                    .setPositiveButton("CLOSE", null)
+                    .create();
+            alertDialog.show();
             e.printStackTrace();
         }
     };
@@ -193,6 +211,11 @@ public class AppSyncHelper {
             @Override
             public void onFailure(@Nonnull ApolloException e) {
                 Log.d(TAG, "listAlbums failed." + e.getLocalizedMessage());
+                AlertDialog alertDialog = new AlertDialog.Builder(CURRENT_CONTEXT)
+                        .setTitle("List albums failed.")
+                        .setPositiveButton("CLOSE", null)
+                        .create();
+                alertDialog.show();
                 e.printStackTrace();
                 listAlbumsLatch.countDown();
             }
@@ -217,6 +240,11 @@ public class AppSyncHelper {
         @Override
         public void onFailure(@Nonnull ApolloException e) {
             Log.i(TAG, "Failed to create a photo.");
+            AlertDialog alertDialog = new AlertDialog.Builder(CURRENT_CONTEXT)
+                    .setTitle("Create photo failed.")
+                    .setPositiveButton("CLOSE", null)
+                    .create();
+            alertDialog.show();
             e.printStackTrace();
         }
     };
