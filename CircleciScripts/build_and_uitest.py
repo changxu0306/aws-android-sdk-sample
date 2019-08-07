@@ -43,7 +43,7 @@ def build_and_uitest(circleci_root_directory, app_name, app_repo_root_directory)
 
     # build and run ui test
     print('Run UI Tests...')
-    ui_tests = get_test_names_from_json("{0}/CircleCIScripts/test_names.json".format(app_repo_root_directory))
+    ui_tests = get_test_names_from_json("{0}/CircleciScripts/test_names.json".format(app_repo_root_directory))
     for ui_test in ui_tests:
         run_uitest(ui_test = ui_test, app_name = app_name)
         store_uitest_results(ui_test = ui_test,
