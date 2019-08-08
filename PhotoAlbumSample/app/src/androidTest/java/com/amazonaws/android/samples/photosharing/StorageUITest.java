@@ -1,4 +1,4 @@
-package com.amazonaws.android.samples.photosharing;
+=package com.amazonaws.android.samples.photosharing;
 
 import android.Manifest;
 import android.content.Context;
@@ -237,15 +237,35 @@ public class StorageUITest {
             }
         }
 
-        ViewInteraction button = onView(allOf(withId(R.id.buttonDownload)));
-        Log.e(TAG,"click Download button");
-        button.perform(click());
+        timeOut = 0;
+        while (timeOut < (MAX_TIME_OUT / 2)) {
+            try {
+                ViewInteraction button = onView(allOf(withId(R.id.buttonDownload)));
+                Log.e(TAG, "click Download button");
+                button.perform(click());
+                break;
+            } catch (NoMatchingViewException e) {
+            } finally {
+                Thread.sleep(5000);
+                timeOut += 5000;
+            }
+        }
 
-        DataInteraction linearLayout = onData(anything())
-                .inAdapterView(allOf(withId(android.R.id.list)))
-                .atPosition(0);
-        Log.e(TAG,"Select downloading file from the 1st place.");
-        linearLayout.perform(click());
+        timeOut = 0;
+        while (timeOut < (MAX_TIME_OUT / 2)) {
+            try {
+                DataInteraction linearLayout = onData(anything())
+                        .inAdapterView(allOf(withId(android.R.id.list)))
+                        .atPosition(0);
+                Log.e(TAG, "Select downloading file from the 1st place.");
+                linearLayout.perform(click());
+                break;
+            } catch (NoMatchingViewException e) {
+            } finally {
+                Thread.sleep(5000);
+                timeOut += 5000;
+            }
+        }
 
         timeOut = 0;
         while (timeOut < MAX_TIME_OUT) {
