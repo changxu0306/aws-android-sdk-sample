@@ -151,10 +151,19 @@ public class AppSyncMutationUITest {
 
         UIActionsUtil.clickEdit();
 
-        // Check if the album is added successfully
-        onView(withText(ALBUM_NAME_FOR_TESTING)).check(matches(isDisplayed()));
-
-        Log.e(TAG, "An album is added successfully!");
+        int timeOut = 0;
+        while (timeOut < MAX_TIME_OUT) {
+            try {
+                // Check if the album is added successfully
+                onView(withText(ALBUM_NAME_FOR_TESTING)).check(matches(isDisplayed()));
+                Log.e(TAG, "An album is added successfully!");
+                break;
+            } catch (NoMatchingViewException e) {
+            } finally {
+                Thread.sleep(5000);
+                timeOut += 5000;
+            }
+        }
 
         // Delete an album
         ViewInteraction appCompatButton2 = onView(
@@ -167,7 +176,7 @@ public class AppSyncMutationUITest {
         appCompatButton2.perform(click());
 
         // assert the album has been deleted successfully
-        int timeOut = 0;
+        timeOut = 0;
         while (timeOut < MAX_TIME_OUT) {
             try {
                 ViewInteraction textView2 = onView(
