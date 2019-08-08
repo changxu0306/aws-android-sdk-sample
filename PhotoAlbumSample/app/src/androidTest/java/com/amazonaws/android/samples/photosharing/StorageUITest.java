@@ -1,4 +1,4 @@
-=package com.amazonaws.android.samples.photosharing;
+package com.amazonaws.android.samples.photosharing;
 
 import android.Manifest;
 import android.content.Context;
