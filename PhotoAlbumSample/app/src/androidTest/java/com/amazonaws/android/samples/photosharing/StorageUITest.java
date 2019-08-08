@@ -197,7 +197,7 @@ public class StorageUITest {
         UIActionsUtil.clickUploadPhoto();
 
         timeOut = 0;
-        while (timeOut < MAX_TIME_OUT) {
+        while (timeOut < (MAX_TIME_OUT / 2)) {
             try {
                 ViewInteraction textView = onView(
                         allOf(IsInstanceOf.<View>instanceOf(android.widget.TextView.class), withText("Upload Succeed Message"),
@@ -218,14 +218,24 @@ public class StorageUITest {
             }
         }
 
-        ViewInteraction appCompatButton = onView(
-                allOf(withId(android.R.id.button1), withText("DONE"),
-                        childAtPosition(
+        timeOut = 0;
+        while (timeOut < (MAX_TIME_OUT / 2)) {
+            try {
+                ViewInteraction appCompatButton = onView(
+                        allOf(withId(android.R.id.button1), withText("DONE"),
                                 childAtPosition(
-                                        withClassName(is("android.widget.ScrollView")),
-                                        0),
-                                3)));
-        appCompatButton.perform(scrollTo(), click());
+                                        childAtPosition(
+                                                withClassName(is("android.widget.ScrollView")),
+                                                0),
+                                        3)));
+                appCompatButton.perform(scrollTo(), click());
+                break;
+            } catch (NoMatchingViewException e) {
+            } finally {
+                Thread.sleep(5000);
+                timeOut += 5000;
+            }
+        }
 
         ViewInteraction button = onView(allOf(withId(R.id.buttonDownload)));
         Log.e(TAG,"click Download button");
