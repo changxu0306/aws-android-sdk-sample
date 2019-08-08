@@ -27,7 +27,7 @@ def add_local_dependency_app_build_gradle(app_root_directory,
     with open(build_gradle_copy_path, 'w+') as new_file:
         with open(build_gradle_path) as old_file:
             for line in old_file:
-                line = re.sub(re.compile(r"####LOCAL_REPO_PATH####"), 'file://' + maven_artifacts_directory, line)
+                line = re.sub(re.compile(r"####LOCAL_REPO_PATH####"), 'file:/' + maven_artifacts_directory, line)
                 if branches_to_uitest['default'] != 'master':
                     line = re.sub(re.compile(r"^\s*def\s+aws_version\s*=\s*\".+\""), "  def aws_version = '{0}'  ".format(newsdkversion), line)
                 if branches_to_uitest['appsync'] != 'master':
