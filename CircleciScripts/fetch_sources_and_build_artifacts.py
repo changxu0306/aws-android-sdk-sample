@@ -56,7 +56,7 @@ def fetch_sources_and_build_artifacts(appname, maven_artifacts_directory, app_ro
         # runcommand(command="mvn clean install -DskipTests=true -Dmaven.repo.local={0}".format(maven_artifacts_directory),
         #            exception_to_raise=BuildSourceException(appname, 'default'))
         runcommand(
-            command="mvn clean install -DskipTests=true ".format(maven_artifacts_directory),
+            command="mvn clean install -DskipTests=true -Dmaven.repo.local={0}".format(maven_artifacts_directory),
             exception_to_raise=BuildSourceException(appname, 'default'))
 
     sdk_branch_to_uitest = branches_to_uitest['appsync']
@@ -86,7 +86,7 @@ def fetch_sources_and_build_artifacts(appname, maven_artifacts_directory, app_ro
         runcommand(command = "MAVEN_OPTS='-Xms1024m -Xmx2048m -XX:PermSize=512m -XX:MaxPermSize=1024m'",
                    exception_to_raise = BuildSourceException(appname, 'default'))
 
-        runcommand(command="bash gradlew publishToMavenLocal".format(maven_artifacts_directory),
+        runcommand(command="bash gradlew publishToMavenLocal -Dmaven.repo.local={0}".format(maven_artifacts_directory),
                    exception_to_raise=BuildSourceException(appname, 'appsync'))
 
     add_local_dependency_app_build_gradle(app_root_directory = app_root_directory,
