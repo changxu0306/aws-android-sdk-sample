@@ -15,7 +15,7 @@ def fetch_sources_and_build_artifacts(appname, maven_artifacts_directory, app_ro
 
     ## fetch and build sdk source files from default(aws android) repo
 
-    branches_to_uitest = {'default': os.environ['CIRCLE_BRANCH'],
+    branches_to_uitest = {'default': os.environ['android_sdk_branch_to_uitest'],
                           'appsync': os.environ['appSync_branch_to_uitest']}
 
     newsdkversion = '100.100.100'
