@@ -4,7 +4,7 @@ owner: com.amazonaws
 """
 
 
-from setup_local_maven import setup_local_maven
+from setup_mobile_sdk_dependencies import setup_local_maven
 from uitests_exceptions import *
 from traceback import print_exception
 import argparse

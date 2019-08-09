@@ -39,8 +39,3 @@ def add_local_dependency_app_build_gradle(app_root_directory,
 
     # Rename new file
     rename(build_gradle_copy_path, build_gradle_path)
-
-# add_local_dependency_app_build_gradle('/Users/edupp/Documents/EndToEnd/local/aws-android-sdk-sample/PhotoAlbumSample',
-#                                       {'default':'develop','appsync':'dev'},
-#                                       'hfqefj/bfhqebfk', '100.100.101',
-#                                       'PhotoAlbumSample')
