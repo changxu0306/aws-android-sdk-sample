@@ -323,9 +323,6 @@ public class PhotoActivity extends AppCompatActivity {
             @Override
             public void onStateChanged(int id, TransferState state) {
                 if (state.equals(TransferState.COMPLETED)) {
-                    Toast.makeText(PhotoActivity.this, "Download succeed!",
-                            Toast.LENGTH_LONG).show();
-
                     photoList.add(new Photo("123", file.getName(), bucket, key, BitmapFactory.decodeFile(file.getPath())));
                     updatePhotoGridViewWithPhotos();
                 }

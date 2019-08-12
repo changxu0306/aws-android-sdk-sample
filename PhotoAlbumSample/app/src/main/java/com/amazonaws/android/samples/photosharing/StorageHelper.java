@@ -217,8 +217,7 @@ public class StorageHelper {
 
         if (doSave) {
             saveBitmapToFile(dir, fileName, bm, Bitmap.CompressFormat.PNG,100);
-        }
-        else {
+        } else {
             Log.e(TAG,"Couldn't create target directory.");
         }
 

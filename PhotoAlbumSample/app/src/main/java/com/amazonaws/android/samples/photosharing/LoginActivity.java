@@ -95,10 +95,15 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onError(Exception e) {
                 Log.e(TAG, "onError: ", e);
-                new AlertDialog.Builder(LoginActivity.this)
-                        .setTitle("LoginError")
-                        .setMessage("Error logging in. Please check your username, password and network connection.")
-                        .show();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialog.Builder(LoginActivity.this)
+                                .setTitle("LoginError")
+                                .setMessage("Error logging in. Please check your username, password and network connection.")
+                                .show();
+                    }
+                });
             }
         });
     }
@@ -144,10 +149,15 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onError(Exception e) {
                         Log.e(TAG, "onError: ", e);
-                        new AlertDialog.Builder(LoginActivity.this)
-                                .setTitle("LoginError")
-                                .setMessage("Error logging in. Please check your username, password and network connection.")
-                                .show();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                new AlertDialog.Builder(LoginActivity.this)
+                                        .setTitle("LoginError")
+                                        .setMessage("Error logging in. Please check your username, password and network connection.")
+                                        .show();
+                            }
+                        });
                     }
                 }
         );
