@@ -2,7 +2,8 @@
 	"tests" : [
 		{
 			"auth" : ["AuthUITest"],
-			"api" : ["AppSyncMutationUITest", "AppSyncQueryUITest"]
+			"api" : ["AppSyncMutationUITest", "AppSyncQueryUITest"],
+			"storage" : ["StorageUITest"]
 		}
 	]
 }
