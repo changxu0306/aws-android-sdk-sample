@@ -8,8 +8,8 @@ while True:
     if rn == 0 :
         print("Unlocked emulator screen")
         exit(0)
-    if ncount > 10 :
+    if ncount > 20 :
         print("Failed to unlock emulator screen")
         exit(1)
-    time.sleep(10)
+    time.sleep(100)
     ncount = ncount + 1
