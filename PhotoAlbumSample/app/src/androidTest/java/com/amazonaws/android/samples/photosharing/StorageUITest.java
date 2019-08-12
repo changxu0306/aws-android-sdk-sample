@@ -321,19 +321,39 @@ public class StorageUITest {
             UIActionsUtil.clickEdit();
 
             // delete album
-            ViewInteraction appCompatButton3 = onView(
-                    allOf(withId(R.id.delete_album),
-                            childAtPosition(
-                                    withParent(withId(R.id.gw_lstAlbum)),
-                                    1),
-                            isDisplayed()));
-            appCompatButton3.perform(click());
+            timeOut = 0;
+            while (timeOut < MAX_TIME_OUT) {
+                try {
+                    ViewInteraction appCompatButton3 = onView(
+                            allOf(withId(R.id.delete_album),
+                                    childAtPosition(
+                                            withParent(withId(R.id.gw_lstAlbum)),
+                                            1),
+                                    isDisplayed()));
+                    appCompatButton3.perform(click());
+                    break;
+                } catch (NoMatchingViewException e) {
+                } finally {
+                    Thread.sleep(5000);
+                    timeOut += 5000;
+                }
+            }
 
             // assert the album has been deleted successfully
-            ViewInteraction textView2 = onView(
-                    allOf(withId(R.id.album_name), withText(ALBUM_NAME_FOR_TESTING)));
-            textView2.check(doesNotExist());
-            Log.e(TAG, "An album is deleted successfully!");
+            timeOut = 0;
+            while (timeOut < MAX_TIME_OUT) {
+                try {
+                    ViewInteraction textView2 = onView(
+                            allOf(withId(R.id.album_name), withText(ALBUM_NAME_FOR_TESTING)));
+                    textView2.check(doesNotExist());
+                    Log.e(TAG, "An album is deleted successfully!");
+                    break;
+                } catch (NoMatchingViewException e) {
+                } finally {
+                    Thread.sleep(5000);
+                    timeOut += 5000;
+                }
+            }
 
             UIActionsUtil.clickSignOut();
 
