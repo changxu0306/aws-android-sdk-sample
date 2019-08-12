@@ -10,14 +10,14 @@ import json
 from shutil import rmtree
 from shutil import copyfile
 
+# Get a list of test class by reading from json file
 def get_test_names_from_json(test_names_json_file):
     with open(test_names_json_file) as json_file:
         test_names = json.load(json_file)
         ui_test_names = []
-        for category in test_names["tests"]:
-            for test_name in category.keys():
-                for test in category[test_name]:
-                  ui_test_names.append(test)
+        for category in test_names.keys():
+            for test_name in test_names[category]:
+                  ui_test_names.append(test_name)
     return ui_test_names
 
 def build_and_uitest(circleci_root_directory, app_name, app_repo_root_directory):
