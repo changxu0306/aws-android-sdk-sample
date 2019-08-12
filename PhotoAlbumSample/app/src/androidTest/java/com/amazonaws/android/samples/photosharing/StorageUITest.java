@@ -1,3 +1,18 @@
+/*
+ * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://aws.amazon.com/apache2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
 package com.amazonaws.android.samples.photosharing;
 
 import android.Manifest;
@@ -237,15 +252,35 @@ public class StorageUITest {
             }
         }
 
-        ViewInteraction button = onView(allOf(withId(R.id.buttonDownload)));
-        Log.e(TAG,"click Download button");
-        button.perform(click());
+        timeOut = 0;
+        while (timeOut < (MAX_TIME_OUT / 2)) {
+            try {
+                ViewInteraction button = onView(allOf(withId(R.id.buttonDownload)));
+                Log.e(TAG, "click Download button");
+                button.perform(click());
+                break;
+            } catch (NoMatchingViewException e) {
+            } finally {
+                Thread.sleep(5000);
+                timeOut += 5000;
+            }
+        }
 
-        DataInteraction linearLayout = onData(anything())
-                .inAdapterView(allOf(withId(android.R.id.list)))
-                .atPosition(0);
-        Log.e(TAG,"Select downloading file from the 1st place.");
-        linearLayout.perform(click());
+        timeOut = 0;
+        while (timeOut < (MAX_TIME_OUT / 2)) {
+            try {
+                DataInteraction linearLayout = onData(anything())
+                        .inAdapterView(allOf(withId(android.R.id.list)))
+                        .atPosition(0);
+                Log.e(TAG, "Select downloading file from the 1st place.");
+                linearLayout.perform(click());
+                break;
+            } catch (NoMatchingViewException e) {
+            } finally {
+                Thread.sleep(5000);
+                timeOut += 5000;
+            }
+        }
 
         timeOut = 0;
         while (timeOut < MAX_TIME_OUT) {
@@ -286,19 +321,39 @@ public class StorageUITest {
             UIActionsUtil.clickEdit();
 
             // delete album
-            ViewInteraction appCompatButton3 = onView(
-                    allOf(withId(R.id.delete_album),
-                            childAtPosition(
-                                    withParent(withId(R.id.gw_lstAlbum)),
-                                    1),
-                            isDisplayed()));
-            appCompatButton3.perform(click());
+            timeOut = 0;
+            while (timeOut < MAX_TIME_OUT) {
+                try {
+                    ViewInteraction appCompatButton3 = onView(
+                            allOf(withId(R.id.delete_album),
+                                    childAtPosition(
+                                            withParent(withId(R.id.gw_lstAlbum)),
+                                            1),
+                                    isDisplayed()));
+                    appCompatButton3.perform(click());
+                    break;
+                } catch (NoMatchingViewException e) {
+                } finally {
+                    Thread.sleep(5000);
+                    timeOut += 5000;
+                }
+            }
 
             // assert the album has been deleted successfully
-            ViewInteraction textView2 = onView(
-                    allOf(withId(R.id.album_name), withText(ALBUM_NAME_FOR_TESTING)));
-            textView2.check(doesNotExist());
-            Log.e(TAG, "An album is deleted successfully!");
+            timeOut = 0;
+            while (timeOut < MAX_TIME_OUT) {
+                try {
+                    ViewInteraction textView2 = onView(
+                            allOf(withId(R.id.album_name), withText(ALBUM_NAME_FOR_TESTING)));
+                    textView2.check(doesNotExist());
+                    Log.e(TAG, "An album is deleted successfully!");
+                    break;
+                } catch (NoMatchingViewException e) {
+                } finally {
+                    Thread.sleep(5000);
+                    timeOut += 5000;
+                }
+            }
 
             UIActionsUtil.clickSignOut();
 

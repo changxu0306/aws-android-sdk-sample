@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.amazonaws.appsync'
+apply plugin: 'maven'
 
 android {
     compileSdkVersion 28
@@ -10,6 +11,10 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        // The following argument makes the Android Test Orchestrator run its
+        // "pm clear" command after each test invocation. This command ensures
+        // that the app's state is completely cleared between tests.
+//        testInstrumentationRunnerArguments clearPackageData: 'true'
 
     }
     buildTypes {
@@ -19,29 +24,43 @@ android {
         }
     }
     testOptions {
+//        execution 'ANDROIDX_TEST_ORCHESTRATOR'
         unitTests {
             includeAndroidResources = true
         }
+        animationsDisabled = true
     }
+}
+
+
+repositories {
+    // DO NOT EDIT. THIS IS A PLACEHOLDER FOR ANY CUSTOM MAVEN LOCAL REPOS
+    maven {
+        url ("####LOCAL_REPO_PATH####")
+    }
+    mavenLocal()
+    mavenCentral()
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
+    
+    // DO NOT EDIT. THE BELOW CONSTANTS ARE SET FROM A SCRIPT IN UITesting.  
     def aws_version = "2.13.+"
+    def aws_appsync_version = "2.9.+"
 
-    // Storage dependency
-    implementation "com.amazonaws:aws-android-sdk-s3:$aws_version"
-
-    // MobileClient dependency
-    implementation("com.amazonaws:aws-android-sdk-mobile-client:$aws_version") { transitive = true }
-
-    // AppSync dependency
-    implementation 'com.amazonaws:aws-android-sdk-appsync:2.9.+'
-
-    // Auth dependency
-    implementation 'com.amazonaws:aws-android-sdk-auth-userpools:2.13.+'
-    implementation 'com.amazonaws:aws-android-sdk-auth-ui:2.13.+'
+//    // Storage dependency
+     implementation "com.amazonaws:aws-android-sdk-s3:$aws_version"
+//
+//    // MobileClient dependency
+     implementation("com.amazonaws:aws-android-sdk-mobile-client:$aws_version") { transitive = true }
+//
+//    // AppSync dependency
+     implementation "com.amazonaws:aws-android-sdk-appsync:$aws_appsync_version"
+//
+//    // Auth dependency
+    implementation "com.amazonaws:aws-android-sdk-auth-userpools:$aws_version"
+    implementation "com.amazonaws:aws-android-sdk-auth-ui:$aws_version"
 
     // Add Android Test Orchestrator dependency
     androidTestImplementation 'androidx.test:runner:1.1.0'
