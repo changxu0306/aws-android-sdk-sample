@@ -37,7 +37,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.doesNotExis
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertEquals;
@@ -182,29 +181,31 @@ public class AppSyncQueryUITest {
 
         UIActionsUtil.clickEdit();
 
-        // Delete an album
-        ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.delete_album),
-                        childAtPosition(
-                                withParent(withId(R.id.gw_lstAlbum)),
-                                1),
-                        isDisplayed()));
-        Log.e(TAG, "Click delete button.");
-        appCompatButton2.perform(click());
+        // delete album
+        timeOut = 0;
+        while (timeOut < MAX_TIME_OUT) {
+            try {
+                onView(UIActionsUtil.withIndex(withId(R.id.delete_album), 0)).perform(click());
+                break;
+            } catch (NoMatchingViewException e) {
+            } finally {
+                Thread.sleep(5000);
+                timeOut += 5000;
+            }
+        }
 
         // assert the album has been deleted successfully
         timeOut = 0;
         while (timeOut < MAX_TIME_OUT) {
             try {
-                ViewInteraction textView2 = onView(
-                        allOf(withId(R.id.album_name), withText(ALBUM_NAME_FOR_TESTING)));
-                textView2.check(doesNotExist());
+                onView(allOf(withId(R.id.album_name), withText(ALBUM_NAME_FOR_TESTING))).check(doesNotExist());
                 Log.e(TAG, "An album is deleted successfully!");
                 break;
             } catch (NoMatchingViewException e) {
+            } finally {
+                Thread.sleep(5000);
+                timeOut += 5000;
             }
-            Thread.sleep(5000);
-            timeOut += 5000;
         }
 
         UIActionsUtil.clickSignOut();

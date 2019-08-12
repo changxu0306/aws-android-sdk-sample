@@ -55,7 +55,6 @@ public class AuthUITest {
 
     @Before
     public void setUp() throws Exception {
-
         Context appContext = InstrumentationRegistry.getTargetContext();
         UIActionsUtil.signOut();
         final CountDownLatch latch = new CountDownLatch(1);
