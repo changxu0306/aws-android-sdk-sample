@@ -153,8 +153,7 @@ public class AppSyncQueryUITest {
         int timeOut = 0;
         while (timeOut < MAX_TIME_OUT) {
             try {
-                ViewInteraction button2 = onView(allOf(withId(R.id.user_pool_sign_in_view_id)));
-                button2.check(matches(isDisplayed()));
+                onView(allOf(withId(R.id.user_pool_sign_in_view_id))).check(matches(isDisplayed()));
                 Log.e(TAG,"The view has gone back to LoginActivity.");
                 break;
             } catch (NoMatchingViewException e) {
@@ -183,24 +182,19 @@ public class AppSyncQueryUITest {
         }
 
         // Check if albums are listed from AppSync.
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.album_name), withText(ALBUM_NAME_FOR_TESTING),
-                        childAtPosition(
+        timeOut = 0;
+        while (timeOut < MAX_TIME_OUT) {
+            try {
+                ViewInteraction textView = onView(
+                        allOf(withId(R.id.album_name), withText(ALBUM_NAME_FOR_TESTING),
                                 childAtPosition(
-                                        withId(R.id.gw_lstAlbum),
-                                        0),
-                                2),
-                        isDisplayed()));
-        textView.check(matches(withText(ALBUM_NAME_FOR_TESTING)));
-        Log.e(TAG, "List query succeed.");
-
-        UIActionsUtil.clickEdit();
-
-        // delete album
-        timeOut = 0;
-        while (timeOut < MAX_TIME_OUT) {
-            try {
-                onView(UIActionsUtil.withIndex(withId(R.id.delete_album), 0)).perform(click());
+                                        childAtPosition(
+                                                withId(R.id.gw_lstAlbum),
+                                                0),
+                                        2),
+                                isDisplayed()));
+                textView.check(matches(withText(ALBUM_NAME_FOR_TESTING)));
+                Log.e(TAG, "List query succeed.");
                 break;
             } catch (NoMatchingViewException e) {
             } finally {
@@ -209,33 +203,49 @@ public class AppSyncQueryUITest {
             }
         }
 
-        // assert the album has been deleted successfully
-        timeOut = 0;
-        while (timeOut < MAX_TIME_OUT) {
-            try {
-                onView(allOf(withId(R.id.album_name), withText(ALBUM_NAME_FOR_TESTING))).check(doesNotExist());
-                Log.e(TAG, "An album is deleted successfully!");
-                break;
-            } catch (NoMatchingViewException e) {
-            } finally {
-                Thread.sleep(5000);
-                timeOut += 5000;
-            }
-        }
-
-        UIActionsUtil.clickSignOut();
     }
 
     @After
     public void tearDown() {
         try {
 
+            UIActionsUtil.clickEdit();
+
+            // delete album
+            int timeOut = 0;
+            while (timeOut < MAX_TIME_OUT) {
+                try {
+                    onView(UIActionsUtil.withIndex(withId(R.id.delete_album), 0)).perform(click());
+                    break;
+                } catch (NoMatchingViewException e) {
+                } finally {
+                    Thread.sleep(5000);
+                    timeOut += 5000;
+                }
+            }
+
+            // assert the album has been deleted successfully
+            timeOut = 0;
+            while (timeOut < MAX_TIME_OUT) {
+                try {
+                    onView(allOf(withId(R.id.album_name), withText(ALBUM_NAME_FOR_TESTING))).check(doesNotExist());
+                    Log.e(TAG, "An album is deleted successfully!");
+                    break;
+                } catch (NoMatchingViewException e) {
+                } finally {
+                    Thread.sleep(5000);
+                    timeOut += 5000;
+                }
+            }
+
+            UIActionsUtil.clickSignOut();
+
             UIActionsUtil.signOut();
             // Check if user successfully signed out
             assertEquals(AWSMobileClient.getInstance().currentUserState().getUserState(), UserState.SIGNED_OUT);
 
             // Check if goes back to LoginActivity
-            int timeOut = 0;
+            timeOut = 0;
             while (timeOut < MAX_TIME_OUT) {
                 try {
                     ViewInteraction button2 = onView(allOf(withId(R.id.user_pool_sign_in_view_id)));
