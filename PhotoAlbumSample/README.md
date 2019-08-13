@@ -21,9 +21,6 @@ To run this sample, you need the following:
 The AWS Amplify CLI is a toolchain which includes a robust feature set for simplifying mobile and web application development. 
 
 * [Install the CLI](#install-the-cli)
-* [Commands Summary](#commands-summary)
-* [Tutorials](#tutorials)
-* [Contributing](#contributing)
 * [Start building your app](https://aws-amplify.github.io/docs)
 
 ## Install the CLI
