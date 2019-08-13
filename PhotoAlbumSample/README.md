@@ -49,5 +49,5 @@ Automatic steps:
   * Run `git clone https://github.com/AaronZyLee/amplify-cli.git -b integtest --single-branch` to clone amplify-cli repo.
   * `cd amplify-cli` and run `npm run setup-dev` to build amplify-cli
   * `cd packages/amplify-ui-tests`
-  * Run `npm run config <your-project-root> android <list: categories>`. `[list: categories]` includes `auth`, `storage` and `api`
+  * Run `npm run config <your-project-root> android <list: categories>`. `<list: categories>` includes `auth`, `storage` and `api`
   * Before you run adding api for your cloud, paste your own graphql schema file under `./schemas`, change the file name to `simple_model.graphql`
