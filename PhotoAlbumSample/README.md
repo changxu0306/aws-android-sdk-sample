@@ -2,6 +2,18 @@
 
 This tutorial will show how to run Photo Album sample app locally and walk you through the sample step-by-step to explain and demonstrate how to use the APIs. The Photo Album sample app allows users to sign up, sign in and sign out using Auth with Cognito User Pool; add, delete, update and query albums using AppSync GraphQL; upload and download through S3 buckets using S3 TransferUtility.
 
+## AWS Android SDK
+
+The AWS Android SDK provides a library and documentation for developers to build connected mobile applications using AWS.
+
+### Features / APIs
+
+- [__Authentication__](https://aws-amplify.github.io/docs/android/authentication): APIs and building blocks for developers who want to create user authentication experiences.  
+- [__API__](https://aws-amplify.github.io/docs/android/api): Provides a simple solution when making HTTP requests. It provides an automatic, lightweight signing process which complies with AWS Signature Version 4.
+- [__Storage__](https://aws-amplify.github.io/docs/android/storage): Provides a simple mechanism for managing user content for your app in public, protected or private storage buckets.  
+
+# Run Photo Album Sample App locally
+
 ## Prerequisites
 
 To run this sample, you need the following:
