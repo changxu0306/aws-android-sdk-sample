@@ -9,7 +9,7 @@ The AWS Android SDK provides a library and documentation for developers to build
 ### Features / APIs
 
 - [__Authentication__](https://aws-amplify.github.io/docs/android/authentication): APIs and building blocks for developers who want to create user authentication experiences.  
-- [__API__](https://aws-amplify.github.io/docs/android/api): Provides a simple solution when making HTTP requests. It provides an automatic, lightweight signing process which complies with AWS Signature Version 4.
+- [__API__](https://aws-amplify.github.io/docs/android/api): Provides a solution for making HTTP requests to REST and GraphQL endpoints.
 - [__Storage__](https://aws-amplify.github.io/docs/android/storage): Provides a simple mechanism for managing user content for your app in public, protected or private storage buckets.  
 
 ## Run Photo Album Sample App locally
