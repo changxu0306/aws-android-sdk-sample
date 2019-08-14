@@ -12,9 +12,9 @@ The AWS Android SDK provides a library and documentation for developers to build
 - [__API__](https://aws-amplify.github.io/docs/android/api): Provides a simple solution when making HTTP requests. It provides an automatic, lightweight signing process which complies with AWS Signature Version 4.
 - [__Storage__](https://aws-amplify.github.io/docs/android/storage): Provides a simple mechanism for managing user content for your app in public, protected or private storage buckets.  
 
-# Run Photo Album Sample App locally
+## Run Photo Album Sample App locally
 
-## Prerequisites
+### Prerequisites
 
 To run this sample, you need the following:
 
@@ -22,20 +22,20 @@ To run this sample, you need the following:
 - Amplify CLI to generate required AWS resources for Auth, Storage and API
 - Add AWS dependencies to your project in gradle
 
-## Setting up the Sample app
+### Setting up the Sample app
 
 - Git clone the sample GitHub repo. The sample app root is PhotoAlbumSample.
 - Add required AWS resources using Amplify CLI. You can do this either manually or automatically.
 - Import the sample as a project in an IDE.
 
-## AWS Amplify CLI
+### AWS Amplify CLI
 
 The AWS Amplify CLI is a toolchain which includes a robust feature set for simplifying mobile and web application development. 
 
 * [Install the CLI](#install-the-cli)
 * [Start building your app](https://aws-amplify.github.io/docs)
 
-## Install the CLI
+### Install the CLI
 
  - Requires Node.js® version 8.11.x or later
 
@@ -46,7 +46,7 @@ $ npm install -g @aws-amplify/cli
 $ amplify configure
 ```
 
-## How to add AWS resources using Amplify CLI?
+### How to add AWS resources using Amplify CLI?
 
 Manual steps:
 
