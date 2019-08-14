@@ -1,6 +1,6 @@
 # AWS Android SDK Tutorial - Auth, Storage and AppSync
 
-This tutorial will show how to run Photo Album sample app locally and walk you through the sample step-by-step to explain and demonstrate how to use the APIs. The Photo Album sample app allows users to sign up, sign in and sign out using Auth with Cognito User Pool; add, delete, update and query albums using AppSync GraphQL; upload and download through S3 buckets using S3 TransferUtility.
+This tutorial will show how to run Photo Album sample app and UI tests locally and walk you through the sample step-by-step to explain and demonstrate how to use the APIs. The Photo Album sample app allows users to sign up, sign in and sign out using Auth with Cognito User Pool; add, delete, update and query albums using AppSync GraphQL; upload and download through S3 buckets using S3 TransferUtility.
 
 ## AWS Android SDK
 
@@ -46,7 +46,7 @@ $ npm install -g @aws-amplify/cli
 $ amplify configure
 ```
 
-### How to add AWS resources using Amplify CLI?
+### Generate AWS resources for the sample app using Amplify CLI
 
 Manual steps:
 
@@ -62,7 +62,12 @@ Automatic steps:
   * `cd amplify-cli` and run `npm run setup-dev` to build amplify-cli
   * `cd packages/amplify-ui-tests`
   * Run `npm run config <your-project-root> android <list: categories>`. `<list: categories>` includes `auth`, `storage` and `api`
-  * Before you run adding api for your cloud, paste your own graphql schema file under `./schemas`, change the file name to `simple_model.graphql`
+  * Before you run adding api for your cloud, paste your own GraphQL schema file under `./schemas`, change the file name to `simple_model.graphql`. The GraphQL schema is defined here:
+
+## Run Android Instrumental tests in command line
+
+ * `cd <your-project-root>` to enter your project root.
+ * Run `bash gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=com.amazonaws.android.samples.photosharing.<test_name>` to run one UI test. `<test_name>` is the test class name under androidTest directory.
 
 ## Structure of the sample app
 
