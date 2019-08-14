@@ -64,7 +64,7 @@ Automatic steps:
   * Run `npm run config <your-project-root> android <list: categories>`. `<list: categories>` includes `auth`, `storage` and `api`
   * Before you run adding api for your cloud, paste your own graphql schema file under `./schemas`, change the file name to `simple_model.graphql`
 
-## Understanding the structure of the sample
+## Structure of the sample app
 
 The Photo Album sample app is split into 11 classes, 4 of which are activities.
 
