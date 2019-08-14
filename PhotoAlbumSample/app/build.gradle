@@ -11,11 +11,6 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        // The following argument makes the Android Test Orchestrator run its
-        // "pm clear" command after each test invocation. This command ensures
-        // that the app's state is completely cleared between tests.
-//        testInstrumentationRunnerArguments clearPackageData: 'true'
-
     }
     buildTypes {
         release {
@@ -24,7 +19,6 @@ android {
         }
     }
     testOptions {
-//        execution 'ANDROIDX_TEST_ORCHESTRATOR'
         unitTests {
             includeAndroidResources = true
         }
@@ -49,16 +43,16 @@ dependencies {
     def aws_version = "2.13.+"
     def aws_appsync_version = "2.9.+"
 
-//    // Storage dependency
-     implementation "com.amazonaws:aws-android-sdk-s3:$aws_version"
-//
-//    // MobileClient dependency
-     implementation("com.amazonaws:aws-android-sdk-mobile-client:$aws_version") { transitive = true }
-//
-//    // AppSync dependency
-     implementation "com.amazonaws:aws-android-sdk-appsync:$aws_appsync_version"
-//
-//    // Auth dependency
+    // Storage dependency
+    implementation "com.amazonaws:aws-android-sdk-s3:$aws_version"
+    
+    // MobileClient dependency
+    implementation("com.amazonaws:aws-android-sdk-mobile-client:$aws_version") { transitive = true }
+
+    // AppSync dependency
+    implementation "com.amazonaws:aws-android-sdk-appsync:$aws_appsync_version"
+
+    // Auth dependency
     implementation "com.amazonaws:aws-android-sdk-auth-userpools:$aws_version"
     implementation "com.amazonaws:aws-android-sdk-auth-ui:$aws_version"
 
