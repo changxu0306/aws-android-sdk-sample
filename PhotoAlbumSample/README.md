@@ -62,7 +62,7 @@ Automatic steps:
   * `cd amplify-cli` and run `npm run setup-dev` to build amplify-cli
   * `cd packages/amplify-ui-tests`
   * Run `npm run config <your-project-root> android <list: categories>`. `<list: categories>` includes `auth`, `storage` and `api`
-  * Before you run adding api for your cloud, paste your own GraphQL schema file under `./schemas`, change the file name to `simple_model.graphql`. The GraphQL schema is defined here:
+  * Before you run adding api for your cloud, paste your own GraphQL schema file under `./schemas`, change the file name to `simple_model.graphql`. The GraphQL schema is defined [here](https://github.com/changxu0306/aws-android-sdk-sample/blob/master/PhotoAlbumSample/simple_model.graphql).
 
 ## Run Android Instrumental tests in command line
 
