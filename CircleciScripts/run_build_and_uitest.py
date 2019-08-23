@@ -1,9 +1,3 @@
-"""
-author: Phani Srikar Edupuganti
-owner: com.amazonaws
-"""
-
-
 from build_and_uitest import build_and_uitest
 from uitests_exceptions import *
 from traceback import print_exception
